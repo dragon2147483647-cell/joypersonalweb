@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>陈之玉 · AI Product Portfolio</title>
+  <style>
+    :root{--paper:#f3efe6;--ink:#171717;--orange:#e96d43;--yellow:#efb83f;--blue:#5d86a6;--muted:#777166}
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;color:var(--ink);font-family:"Songti SC","STSong","Noto Serif CJK SC",serif;background:var(--paper);overflow-x:hidden}
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:20;opacity:.18;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.13'/%3E%3C/svg%3E")}
+    a{color:inherit;text-decoration:none}.sans{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{width:min(1180px,calc(100% - 48px));margin:auto}
+    nav{position:fixed;z-index:30;top:18px;left:50%;transform:translateX(-50%);width:min(1180px,calc(100% - 32px));display:flex;justify-content:space-between;align-items:center;mix-blend-mode:multiply}
+    .brand{font-size:15px;font-weight:800;letter-spacing:.12em}.navlinks{display:flex;gap:8px}.navlinks a{font:700 12px -apple-system,sans-serif;padding:9px 12px;background:rgba(243,239,230,.88);border:1px solid rgba(23,23,23,.15);border-radius:20px}.navlinks a:hover{background:var(--ink);color:white}
+    .hero{min-height:760px;height:100vh;max-height:900px;display:grid;grid-template-columns:1.08fr .92fr;align-items:center;position:relative;overflow:hidden}
+    .hero:after{content:"";position:absolute;width:70%;height:140px;left:-10%;bottom:-55px;background:var(--ink);transform:rotate(-3deg);clip-path:polygon(0 22%,100% 0,98% 78%,5% 100%);opacity:.94}
+    .hero-copy{padding-top:30px}.eyebrow{display:inline-block;font:800 12px -apple-system,sans-serif;letter-spacing:.22em;text-transform:uppercase;border-top:2px solid var(--ink);padding-top:10px}.hero h1{font-size:clamp(58px,7.2vw,104px);line-height:.91;margin:28px 0 24px;letter-spacing:-.06em}.hero h1 em{display:block;font-style:italic;font-weight:400;color:var(--orange);margin-left:70px}.hero-intro{width:min(460px,90%);font-size:18px;line-height:1.8;border-left:4px solid var(--orange);padding-left:18px}.hero-meta{display:flex;gap:24px;margin-top:28px;font:700 12px -apple-system,sans-serif}.hero-meta span{padding:8px 10px;border:1px solid var(--ink);transform:rotate(-1deg)}
+    .portrait-stage{height:600px;position:relative}.portrait{position:absolute;width:78%;height:76%;right:-2%;top:10%;background:#ccd9c2;border:8px solid #1a1a1a;transform:rotate(2deg);overflow:hidden;box-shadow:18px 18px 0 rgba(23,23,23,.12)}
+    .portrait:before{content:"";position:absolute;inset:0;background:linear-gradient(145deg,rgba(233,109,67,.12),transparent 40%),radial-gradient(circle at 50% 31%,#e7c7a2 0 13%,transparent 13.5%),linear-gradient(135deg,#dce8cf 0 45%,#819b72 45%)}
+    .portrait:after{content:"CY";position:absolute;width:230px;height:230px;left:50%;top:45%;transform:translate(-50%,-50%);border-radius:48% 52% 44% 56%;background:#242b27;color:#efb83f;font:900 54px Georgia;display:grid;place-items:center;border:10px solid #242b27;box-shadow:0 0 0 3px var(--paper)}
+    .tape{position:absolute;z-index:2;width:130px;height:34px;background:rgba(239,184,63,.78);transform:rotate(-8deg);left:-22px;top:46px}.stamp{position:absolute;z-index:3;right:-18px;bottom:18px;width:150px;height:150px;border:2px solid var(--ink);border-radius:50%;display:grid;place-content:center;text-align:center;font:800 13px -apple-system,sans-serif;transform:rotate(8deg);background:rgba(243,239,230,.9)}
+    .section{padding:110px 0}.label-row{display:flex;align-items:end;justify-content:space-between;margin-bottom:48px}.section-num{font:900 72px Georgia;color:var(--orange);line-height:.7}.section-title{font-size:clamp(44px,6vw,82px);line-height:.95;letter-spacing:-.04em;margin:0}.section-title:after{content:"";display:block;width:120px;height:10px;background:var(--orange);margin-top:16px;transform:rotate(-2deg)}
+    .about-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:50px}.about-note{background:var(--ink);color:white;padding:36px;transform:rotate(-1deg);align-self:start}.about-note h3{font-size:28px;margin:0 0 18px}.about-note p{line-height:1.9;color:#ddd7c9}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{border-top:1px solid var(--ink);padding:18px 10px}.stat b{display:block;font-size:38px;font-family:Georgia}.stat span{font:700 12px -apple-system,sans-serif;color:var(--muted)}
+    .project{border-top:2px solid var(--ink);padding:82px 0}.project-head{display:grid;grid-template-columns:250px 1fr;gap:40px;margin-bottom:55px}.company-mark{font:900 180px/.7 Georgia;letter-spacing:-.12em;color:var(--orange)}.company-mark.xhs{color:var(--yellow)}.project-head h3{font-size:clamp(38px,5vw,66px);margin:0 0 14px}.project-head p{max-width:700px;font-size:17px;line-height:1.8}.role-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.role-tags span{font:700 11px -apple-system,sans-serif;border:1px solid var(--ink);border-radius:999px;padding:7px 10px}
+    .case-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.case{border:1px solid var(--ink);padding:28px;min-height:330px;position:relative;background:rgba(255,255,255,.18)}.case:nth-child(2){transform:translateY(30px)}.case h4{font-size:29px;margin:0 0 16px}.case p{line-height:1.75}.case-index{position:absolute;right:18px;top:-14px;background:var(--paper);font:900 36px Georgia;border:1px solid var(--ink);padding:4px 10px}
+    .pipeline{margin-top:26px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.step{border-top:5px solid var(--orange);padding:14px 10px 10px;background:#ebe5d8}.step b{display:block;font-family:-apple-system,sans-serif;font-size:12px}.step span{display:block;margin-top:7px;color:#686258;font-size:13px;line-height:1.5}
+    .metric-strip{margin-top:55px;display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--ink)}.metric{padding:24px;border-right:1px solid var(--ink)}.metric:last-child{border-right:0}.metric b{display:block;font:italic 900 40px Georgia;color:var(--orange)}.metric span{display:block;font:700 12px -apple-system,sans-serif;margin-top:8px}.metric p{font-size:13px;line-height:1.5;margin:8px 0 0;color:var(--muted)}
+    .timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:24px}.phase{padding:20px 18px;border-left:5px solid var(--ink)}.phase:nth-child(2){border-color:var(--orange)}.phase:nth-child(3){border-color:var(--yellow)}.phase b{font-family:-apple-system,sans-serif}.phase p{font-size:14px;line-height:1.65}
+    .closing{min-height:500px;background:var(--ink);color:white;display:grid;place-content:center;text-align:center;position:relative;overflow:hidden}.closing:before,.closing:after{content:"";position:absolute;width:300px;height:300px;border:1px solid rgba(255,255,255,.16);border-radius:50%}.closing:before{left:-120px;top:-100px}.closing:after{right:-100px;bottom:-150px}.closing h2{font-size:clamp(48px,8vw,92px);margin:0 0 18px}.closing p{color:#d7d1c4;font-size:18px}.closing .eyebrow{border-color:white}
+    footer{background:#0f0f0f;color:#8e8a82;padding:20px 0;font:700 11px -apple-system,sans-serif}.footer-inner{display:flex;justify-content:space-between}
+    .reveal{opacity:0;transform:translateY(24px);transition:.7s cubic-bezier(.2,.7,.2,1)}.reveal.on{opacity:1;transform:none}
+    @media(max-width:800px){.wrap{width:min(100% - 32px,1180px)}nav{top:10px}.navlinks a{display:none}.navlinks a:last-child{display:block}.hero{height:auto;max-height:none;min-height:760px;grid-template-columns:1fr}.hero-copy{z-index:3;padding-top:90px}.hero h1{font-size:58px}.hero h1 em{margin-left:28px}.portrait-stage{position:absolute;right:-60px;bottom:-40px;width:55%;height:400px;opacity:.55}.portrait{width:100%;height:70%}.stamp{display:none}.hero:after{height:100px}.section{padding:72px 0}.label-row{align-items:start}.section-num{font-size:48px}.about-grid,.case-grid,.project-head{grid-template-columns:1fr}.stats{margin-top:20px}.project-head{gap:18px}.company-mark{font-size:110px}.case:nth-child(2){transform:none}.pipeline{grid-template-columns:1fr 1fr}.metric-strip{grid-template-columns:1fr 1fr}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid var(--ink)}.timeline{grid-template-columns:1fr}.footer-inner{gap:12px}.hero-intro{width:88%;font-size:16px}.hero-meta{gap:8px}}
+  </style>
+</head>
+<body>
+  <nav><a class="brand" href="#top">陈之玉 / CY</a><div class="navlinks"><a href="#tencent">Tencent</a><a href="#xhs">Xiaohongshu</a><a href="#about">About</a></div></nav>
+  <header class="hero wrap" id="top">
+    <div class="hero-copy reveal">
+      <span class="eyebrow">AI Product Manager · Portfolio 2025</span>
+      <h1>在浪潮中<br><em>做有意思的事</em></h1>
+      <p class="hero-intro">曾在腾讯文档、小红书负责 AI 与国际化方向的产品工作。善于把复杂模型能力，做成用户可理解、可完成、可持续使用的产品体验。</p>
+      <div class="hero-meta"><span>AI PRODUCT</span><span>CONTENT</span><span>GLOBALIZATION</span></div>
+    </div>
+    <div class="portrait-stage" aria-hidden="true"><div class="tape"></div><div class="portrait"></div><div class="stamp">产品思考<br>模型洞察<br>用户感受</div></div>
+  </header>
+
+  <main>
+    <section class="section wrap reveal" id="about">
+      <div class="label-row"><div><span class="eyebrow">Profile</span><h2 class="section-title">为什么是我</h2></div><div class="section-num">01</div></div>
+      <div class="about-grid">
+        <aside class="about-note"><h3>清醒而热烈，温柔而坚定。</h3><p>我相信好的产品来自长期观察、扎实拆解和敢于试错。文科训练赋予我表达与同理心，AI 实习练就了我与模型、用户、数据反复对话的能力。</p></aside>
+        <div><div class="stats"><div class="stat"><b>2</b><span>头部互联网实习</span></div><div class="stat"><b>AI</b><span>核心赛道</span></div><div class="stat"><b>C→G</b><span>跨端与全球化思维</span></div></div>
+          <div style="margin-top:35px"><h3 style="font-size:28px">核心能力</h3><p style="line-height:2">用户洞察 · 产品策略 · 原型与交互 · 模型评测 · 提示词工程 · 数据分析 · 跨团队协作</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="project wrap reveal" id="tencent">
+      <div class="label-row"><span class="eyebrow">Internship 01 · 2024—2025</span><div class="section-num">02</div></div>
+      <div class="project-head"><div class="company-mark">T.</div><div><h3>腾讯文档 · AI 原生创作</h3><p>围绕 AI 写作与智能排版美化，从“模型能写什么”转向“用户在什么场景下，如何自然地完成创作与编辑”。</p><div class="role-tags"><span>AI 写作</span><span>智能排版</span><span>提示词架构</span><span>交互演进</span></div></div></div>
+      <div class="case-grid">
+        <article class="case"><span class="case-index">A</span><h4>AI 写作：给生成装上创作框架</h4><p>将“裸模型生成”的不确定性拆成可组合的能力。围绕人设、场景、技能、风格、叙事逻辑、行文结构与创作禁区建立提示词底座，并通过材料加工与 few-shot 持续校准。</p><div class="pipeline"><div class="step"><b>01 / 理解意图</b><span>识别场景与创作目的</span></div><div class="step"><b>02 / 提取约束</b><span>组织风格、结构与禁区</span></div><div class="step"><b>03 / 组合生成</b><span>调用模块化提示词管线</span></div><div class="step"><b>04 / 自动质检</b><span>裁判测评与人工打分</span></div></div></article>
+        <article class="case"><span class="case-index">B</span><h4>排版美化：从入口到所见即所得</h4><p>覆盖移动端、PC端、粘贴、新建、协作与导入等跨场景需求。交互从固定入口演进为复制粘贴后的即时推荐，同时保留模板库、上传模板和对话定制作为兜底。</p><div class="pipeline"><div class="step"><b>固定入口</b><span>用户主动寻找美化能力</span></div><div class="step"><b>场景推荐</b><span>在关键节点主动出现</span></div><div class="step"><b>即时预览</b><span>复制粘贴后所见即所得</span></div><div class="step"><b>深度定制</b><span>模板与对话满足个性需求</span></div></div></article>
+      </div>
+      <div class="metric-strip"><div class="metric"><b>2000+</b><span>移动端灰度 DAU</span><p>20% 流量灰度下达到稳定规模</p></div><div class="metric"><b>85%≈</b><span>移动端采纳率</span><p>即时推荐显著降低操作门槛</p></div><div class="metric"><b>+</b><span>新建量正向变化</span><p>空白文档更容易被转化为有效创作</p></div><div class="metric"><b>+</b><span>使用时长正向变化</span><p>能力更贴近用户真实编辑流程</p></div></div>
+    </section>
+
+    <section class="project wrap reveal" id="xhs">
+      <div class="label-row"><span class="eyebrow">Internship 02 · 2024—2025</span><div class="section-num">03</div></div>
+      <div class="project-head"><div class="company-mark xhs">X.</div><div><h3>小红书 · 全球化翻译与多模态</h3><p>负责视频字幕、全站翻译、自动翻译、源语言识别、AI 配音与图片翻译等多语种产品和模型工作。</p><div class="role-tags"><span>全站翻译</span><span>源语言识别</span><span>AI Dubbing</span><span>图片翻译</span></div></div></div>
+      <div class="case-grid">
+        <article class="case"><span class="case-index">C</span><h4>体验优化：让翻译适配真实场景</h4><p>视频字幕从视觉变量到横竖屏位置统一优化；字幕开关演进为“开关 + 固定目标语言”，降低理解成本。Web 全站翻译区分 SEO 与非 SEO 链路，并为自动翻译扩展多语种与用户偏好语言。</p><div class="timeline"><div class="phase"><b>发现问题</b><p>字幕遮挡、语种选择与站内外链路不一致。</p></div><div class="phase"><b>设计方案</b><p>统一语言模型、默认策略与关键交互。</p></div><div class="phase"><b>灰度验证</b><p>以时长与多语种体验指标校验效果。</p></div></div></article>
+        <article class="case"><span class="case-index">D</span><h4>模型迭代：从“会不会混语”到精确语种判断</h4><p>主导源语言识别由二分类升级为语种集合与占比判断。短文本通过字符阈值降级策略，中文笔记中的英文话题标签建立生产侧与消费侧双重判断，避免误翻。</p><div class="pipeline"><div class="step"><b>混语判断</b><span>初始二分类能力</span></div><div class="step"><b>语种集合</b><span>输出结果与占比</span></div><div class="step"><b>短文本降级</b><span>字符阈值策略</span></div><div class="step"><b>双层校验</b><span>规避话题误翻</span></div></div></article>
+      </div>
+      <div class="metric-strip"><div class="metric"><b>+2.42%</b><span>人均 APP 时长</span><p>小语种人群 iOS & 安卓联合实验</p></div><div class="metric"><b>+3.25%</b><span>APP 总时长</span><p>实验期间形成明确正向提升</p></div><div class="metric"><b>100%</b><span>主导语种准确率</span><p>相较初始约 70.8% 大幅提升</p></div><div class="metric"><b>96%</b><span>语种合集准确率</span><p>短文本与混语场景持续校准</p></div></div>
+      <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:24px"><article class="case" style="min-height:260px"><h4>AI Dubbing：评测配音全链路</h4><p>打通配音可用性、ASR、翻译与 TTS。翻译环节采用 0—2 分标准，在语义准确与配音语速间平衡。离线结果中，ASR 合格率提升至 <b>86.83%</b>，翻译合格率提升至 <b>89.11%</b>，TTS 双语合格率提升至 <b>64.30%</b>。</p></article><article class="case" style="min-height:260px"><h4>图片翻译：重定义“可接受”</h4><p>建立意图判断、可渲染性判断与高价值判断标注流程，对不可渲染、低价值、局部遮挡等 badcase 重新分类。让模型评估不只看文字识别，更关注用户看到的最终效果。</p></article></div>
+    </section>
+
+    <section class="closing reveal"><span class="eyebrow">Thank you for reading</span><h2>愿我们相逢</h2><p>我叫陈之玉，期待把热爱与思考，变成真正有价值的产品。</p></section>
+  </main>
+  <footer><div class="wrap footer-inner"><span>CHEN ZHIYU · PORTFOLIO</span><span>AI PRODUCT / CONTENT / GLOBALIZATION</span></div></footer>
+  <script>
+    const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')}),{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+  </script>
+</body>
+</html>
