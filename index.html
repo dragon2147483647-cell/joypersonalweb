@@ -1,86 +1,723 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>陈之玉 · AI Product Portfolio</title>
-  <style>
-    :root{--paper:#f3efe6;--ink:#171717;--orange:#e96d43;--yellow:#efb83f;--blue:#5d86a6;--muted:#777166}
-    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;color:var(--ink);font-family:"Songti SC","STSong","Noto Serif CJK SC",serif;background:var(--paper);overflow-x:hidden}
-    body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:20;opacity:.18;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.13'/%3E%3C/svg%3E")}
-    a{color:inherit;text-decoration:none}.sans{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{width:min(1180px,calc(100% - 48px));margin:auto}
-    nav{position:fixed;z-index:30;top:18px;left:50%;transform:translateX(-50%);width:min(1180px,calc(100% - 32px));display:flex;justify-content:space-between;align-items:center;mix-blend-mode:multiply}
-    .brand{font-size:15px;font-weight:800;letter-spacing:.12em}.navlinks{display:flex;gap:8px}.navlinks a{font:700 12px -apple-system,sans-serif;padding:9px 12px;background:rgba(243,239,230,.88);border:1px solid rgba(23,23,23,.15);border-radius:20px}.navlinks a:hover{background:var(--ink);color:white}
-    .hero{min-height:760px;height:100vh;max-height:900px;display:grid;grid-template-columns:1.08fr .92fr;align-items:center;position:relative;overflow:hidden}
-    .hero:after{content:"";position:absolute;width:70%;height:140px;left:-10%;bottom:-55px;background:var(--ink);transform:rotate(-3deg);clip-path:polygon(0 22%,100% 0,98% 78%,5% 100%);opacity:.94}
-    .hero-copy{padding-top:30px}.eyebrow{display:inline-block;font:800 12px -apple-system,sans-serif;letter-spacing:.22em;text-transform:uppercase;border-top:2px solid var(--ink);padding-top:10px}.hero h1{font-size:clamp(58px,7.2vw,104px);line-height:.91;margin:28px 0 24px;letter-spacing:-.06em}.hero h1 em{display:block;font-style:italic;font-weight:400;color:var(--orange);margin-left:70px}.hero-intro{width:min(460px,90%);font-size:18px;line-height:1.8;border-left:4px solid var(--orange);padding-left:18px}.hero-meta{display:flex;gap:24px;margin-top:28px;font:700 12px -apple-system,sans-serif}.hero-meta span{padding:8px 10px;border:1px solid var(--ink);transform:rotate(-1deg)}
-    .portrait-stage{height:600px;position:relative}.portrait{position:absolute;width:78%;height:76%;right:-2%;top:10%;background:#ccd9c2;border:8px solid #1a1a1a;transform:rotate(2deg);overflow:hidden;box-shadow:18px 18px 0 rgba(23,23,23,.12)}
-    .portrait:before{content:"";position:absolute;inset:0;background:linear-gradient(145deg,rgba(233,109,67,.12),transparent 40%),radial-gradient(circle at 50% 31%,#e7c7a2 0 13%,transparent 13.5%),linear-gradient(135deg,#dce8cf 0 45%,#819b72 45%)}
-    .portrait:after{content:"CY";position:absolute;width:230px;height:230px;left:50%;top:45%;transform:translate(-50%,-50%);border-radius:48% 52% 44% 56%;background:#242b27;color:#efb83f;font:900 54px Georgia;display:grid;place-items:center;border:10px solid #242b27;box-shadow:0 0 0 3px var(--paper)}
-    .tape{position:absolute;z-index:2;width:130px;height:34px;background:rgba(239,184,63,.78);transform:rotate(-8deg);left:-22px;top:46px}.stamp{position:absolute;z-index:3;right:-18px;bottom:18px;width:150px;height:150px;border:2px solid var(--ink);border-radius:50%;display:grid;place-content:center;text-align:center;font:800 13px -apple-system,sans-serif;transform:rotate(8deg);background:rgba(243,239,230,.9)}
-    .section{padding:110px 0}.label-row{display:flex;align-items:end;justify-content:space-between;margin-bottom:48px}.section-num{font:900 72px Georgia;color:var(--orange);line-height:.7}.section-title{font-size:clamp(44px,6vw,82px);line-height:.95;letter-spacing:-.04em;margin:0}.section-title:after{content:"";display:block;width:120px;height:10px;background:var(--orange);margin-top:16px;transform:rotate(-2deg)}
-    .about-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:50px}.about-note{background:var(--ink);color:white;padding:36px;transform:rotate(-1deg);align-self:start}.about-note h3{font-size:28px;margin:0 0 18px}.about-note p{line-height:1.9;color:#ddd7c9}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{border-top:1px solid var(--ink);padding:18px 10px}.stat b{display:block;font-size:38px;font-family:Georgia}.stat span{font:700 12px -apple-system,sans-serif;color:var(--muted)}
-    .project{border-top:2px solid var(--ink);padding:82px 0}.project-head{display:grid;grid-template-columns:250px 1fr;gap:40px;margin-bottom:55px}.company-mark{font:900 180px/.7 Georgia;letter-spacing:-.12em;color:var(--orange)}.company-mark.xhs{color:var(--yellow)}.project-head h3{font-size:clamp(38px,5vw,66px);margin:0 0 14px}.project-head p{max-width:700px;font-size:17px;line-height:1.8}.role-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.role-tags span{font:700 11px -apple-system,sans-serif;border:1px solid var(--ink);border-radius:999px;padding:7px 10px}
-    .case-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.case{border:1px solid var(--ink);padding:28px;min-height:330px;position:relative;background:rgba(255,255,255,.18)}.case:nth-child(2){transform:translateY(30px)}.case h4{font-size:29px;margin:0 0 16px}.case p{line-height:1.75}.case-index{position:absolute;right:18px;top:-14px;background:var(--paper);font:900 36px Georgia;border:1px solid var(--ink);padding:4px 10px}
-    .pipeline{margin-top:26px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.step{border-top:5px solid var(--orange);padding:14px 10px 10px;background:#ebe5d8}.step b{display:block;font-family:-apple-system,sans-serif;font-size:12px}.step span{display:block;margin-top:7px;color:#686258;font-size:13px;line-height:1.5}
-    .metric-strip{margin-top:55px;display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--ink)}.metric{padding:24px;border-right:1px solid var(--ink)}.metric:last-child{border-right:0}.metric b{display:block;font:italic 900 40px Georgia;color:var(--orange)}.metric span{display:block;font:700 12px -apple-system,sans-serif;margin-top:8px}.metric p{font-size:13px;line-height:1.5;margin:8px 0 0;color:var(--muted)}
-    .timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:24px}.phase{padding:20px 18px;border-left:5px solid var(--ink)}.phase:nth-child(2){border-color:var(--orange)}.phase:nth-child(3){border-color:var(--yellow)}.phase b{font-family:-apple-system,sans-serif}.phase p{font-size:14px;line-height:1.65}
-    .closing{min-height:500px;background:var(--ink);color:white;display:grid;place-content:center;text-align:center;position:relative;overflow:hidden}.closing:before,.closing:after{content:"";position:absolute;width:300px;height:300px;border:1px solid rgba(255,255,255,.16);border-radius:50%}.closing:before{left:-120px;top:-100px}.closing:after{right:-100px;bottom:-150px}.closing h2{font-size:clamp(48px,8vw,92px);margin:0 0 18px}.closing p{color:#d7d1c4;font-size:18px}.closing .eyebrow{border-color:white}
-    footer{background:#0f0f0f;color:#8e8a82;padding:20px 0;font:700 11px -apple-system,sans-serif}.footer-inner{display:flex;justify-content:space-between}
-    .reveal{opacity:0;transform:translateY(24px);transition:.7s cubic-bezier(.2,.7,.2,1)}.reveal.on{opacity:1;transform:none}
-    @media(max-width:800px){.wrap{width:min(100% - 32px,1180px)}nav{top:10px}.navlinks a{display:none}.navlinks a:last-child{display:block}.hero{height:auto;max-height:none;min-height:760px;grid-template-columns:1fr}.hero-copy{z-index:3;padding-top:90px}.hero h1{font-size:58px}.hero h1 em{margin-left:28px}.portrait-stage{position:absolute;right:-60px;bottom:-40px;width:55%;height:400px;opacity:.55}.portrait{width:100%;height:70%}.stamp{display:none}.hero:after{height:100px}.section{padding:72px 0}.label-row{align-items:start}.section-num{font-size:48px}.about-grid,.case-grid,.project-head{grid-template-columns:1fr}.stats{margin-top:20px}.project-head{gap:18px}.company-mark{font-size:110px}.case:nth-child(2){transform:none}.pipeline{grid-template-columns:1fr 1fr}.metric-strip{grid-template-columns:1fr 1fr}.metric:nth-child(2){border-right:0}.metric:nth-child(-n+2){border-bottom:1px solid var(--ink)}.timeline{grid-template-columns:1fr}.footer-inner{gap:12px}.hero-intro{width:88%;font-size:16px}.hero-meta{gap:8px}}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Joy's Planet · Personal Homepage</title>
+<style>
+  /* ===== 调色板：粉色为主，但用奶油底 + 白色卡片 + 彩色涂鸦把画面打散 ===== */
+  :root{
+    --paper:#FFF7F2;        /* 奶油纸底 */
+    --pink:#F7C9D9;         /* 主粉 */
+    --pink-soft:#FCE3EC;
+    --pink-deep:#EA9FBB;
+    --ink:#2B2B2B;          /* 手绘黑线 */
+    --lilac:#B7A2D6;        /* 涂鸦紫 */
+    --sky:#9FC7E2;          /* 涂鸦蓝 */
+    --butter:#F6D77A;       /* 涂鸦黄 */
+    --mint:#A9D6BB;         /* 涂鸦绿 */
+    --hand-cn:"Xingkai SC","STXingkai","Kaiti SC","STKaiti","KaiTi",cursive;
+    --hand-en:"Comic Sans MS","Chalkboard SE","Marker Felt","Segoe Print",cursive;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;min-height:100vh;color:var(--ink);
+    font-family:var(--hand-en);
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 12% 18%,rgba(247,201,217,.35) 0 18%,transparent 18.5%),
+      radial-gradient(circle at 88% 82%,rgba(159,199,226,.22) 0 16%,transparent 16.5%),
+      radial-gradient(circle at 70% 8%,rgba(246,215,122,.18) 0 12%,transparent 12.5%);
+    overflow-x:hidden;
+  }
+  /* 纸张颗粒感 */
+  .grain{position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.20;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");}
+
+  button{font-family:inherit;color:inherit}
+
+  /* ===== 舞台 ===== */
+  .stage{position:relative;width:min(1440px,calc(100% - 48px));height:min(860px,94vh);min-height:660px;margin:0 auto;padding-top:8px}
+
+  /* 两页共用一个连续背景流，避免衔接处出现硬边 */
+  .page-flow{position:relative;overflow:hidden;background:var(--paper);
+    background-image:
+      radial-gradient(ellipse 55% 22% at 2% 2%, rgba(247,201,217,.5) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 16% at 99% 4%, rgba(247,201,217,.38) 0%, transparent 72%),
+      radial-gradient(ellipse 60% 14% at 50% 96%, rgba(247,201,217,.42) 0%, transparent 72%)}
+  .crayon-bg{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
+
+  /* 手绘涂鸦星星 */
+  .doodle{position:absolute;z-index:1;pointer-events:none}
+  .doodle svg{display:block;width:100%;height:100%;overflow:visible}
+  .d1{width:44px;height:44px;left:41%;top:5%;transform:rotate(12deg)}
+  .d2{width:34px;height:34px;left:9%;top:22%;transform:rotate(-18deg)}
+  .d3{width:30px;height:30px;left:34%;bottom:12%;transform:rotate(24deg)}
+  .d4{width:52px;height:52px;right:30%;bottom:9%;transform:rotate(-8deg)}
+  .d5{width:26px;height:26px;right:6%;top:23%;transform:rotate(6deg)}
+
+  /* ===== 入口卡片（button 组件，暂不跳转） ===== */
+  .card{position:absolute;z-index:3;display:flex;flex-direction:column;align-items:flex-start;gap:10px;
+    padding:16px 18px 18px;background:#FFFEFC;border:3px solid var(--ink);
+    border-radius:255px 14px 225px 16px/16px 225px 16px 255px; /* 手绘不规则边 */
+    box-shadow:7px 8px 0 rgba(43,43,43,.14);cursor:pointer;text-align:left;
+    transform:translate(-50%,-50%);
+    transition:transform .18s ease,box-shadow .18s ease,background .18s ease;}
+  .card:hover,.card:focus-visible{transform:translate(-50%,-50%) scale(1.04);box-shadow:11px 13px 0 rgba(43,43,43,.20);background:#fff;outline:none}
+  .card:active{transform:translate(-50%,-50%) scale(.98);box-shadow:4px 5px 0 rgba(43,43,43,.18)}
+  .card .t{font-size:27px;line-height:1;font-weight:700;letter-spacing:.02em;position:relative;z-index:2}
+  .card .desc{font-family:var(--hand-en);font-size:15px;line-height:1.45;color:#4d3a43;max-width:100%;
+    position:relative;z-index:2;min-height:22px}
+  .card .art{width:100%;height:86px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .card .art svg{width:100%;height:100%;overflow:visible;flex:0 0 auto}
+
+  /* 众星拱月：11 点 / 9 点 / 1 点三个方位，统一以卡片中心对齐极坐标点 */
+  .card-cv{left:30%;top:20%;width:212px;transform:translate(-50%,-50%) rotate(-4deg)}
+  .card-cv:hover,.card-cv:focus-visible{transform:translate(-50%,-50%) scale(1.04) rotate(-2deg)}
+  .card-cv .t{color:#3f6f52}
+
+  .card-dream{left:70%;top:20%;width:238px;transform:translate(-50%,-50%) rotate(4deg)}
+  .card-dream:hover,.card-dream:focus-visible{transform:translate(-50%,-50%) scale(1.04) rotate(2deg)}
+  .card-dream .art{height:84px}
+  .card-dream .t{color:#4a6f91}
+
+  .card-intern{left:12%;top:50%;width:216px;transform:translate(-50%,-50%) rotate(3deg)}
+  .card-intern:hover,.card-intern:focus-visible{transform:translate(-50%,-50%) scale(1.04) rotate(1deg)}
+  .card-intern .t{color:#7a5490}
+  .card-intern .art{height:88px}
+
+  /* ===== 中间：QQ人跟随动效 ===== */
+  .hero-center{position:absolute;z-index:4;left:50%;top:50%;transform:translate(-50%,-50%);width:330px;text-align:center}
+  .portrait{position:relative;width:100%;height:400px;border:4px solid var(--ink);border-radius:14px 260px 16px 250px/250px 16px 245px 14px;
+    background:#FDF0F4;overflow:hidden;box-shadow:10px 12px 0 rgba(43,43,43,.18);transform:rotate(1deg)}
+  /* 相框内的角色精灵：铺满相框，用背景定位切帧 */
+  .portrait .ip-sprite{position:absolute;inset:0;
+    background-image:url('./ip-motion-web/motion.webp');
+    background-size:500% 500%;
+    background-position:0% 0%;
+    background-repeat:no-repeat;
+    z-index:1;}
+  /* 兼容旧 CSS 画的底图（本页不需要） */
+  .portrait:before,.portrait:after{display:none}
+  .tape{position:absolute;z-index:3;top:-16px;left:50%;width:124px;height:30px;
+    background:rgba(246,215,122,.82);border:1.5px solid rgba(43,43,43,.35);
+    transform:translateX(-50%) rotate(-4deg)}
+
+  /* ===== 右侧手写欢迎语 ===== */
+  .welcome{position:absolute;z-index:3;left:88%;top:50%;width:300px;transform:translate(-50%,-50%) rotate(2deg)}
+  .welcome h1{margin:0;font-family:var(--hand-en);font-weight:700;font-size:clamp(36px,3.4vw,52px);line-height:1.06;letter-spacing:-.02em;
+    text-shadow:.6px .6px 0 rgba(43,43,43,.18)}
+  .welcome .squiggle{margin:6px 0 2px;width:200px;height:18px}
+  .welcome   .ready{font-family:var(--hand-en);font-size:20px;color:#7a5490}
+
+  /* ===== 底部小注脚 ===== */
+  .foot{position:absolute;z-index:2;left:50%;bottom:2%;transform:translateX(-50%);font-family:var(--hand-en);
+    font-size:12px;letter-spacing:.12em;color:#5a3946;white-space:nowrap;
+    background:rgba(255,247,242,.72);padding:3px 12px;border-radius:14px}
+  .scroll-hint{position:absolute;z-index:2;left:50%;bottom:5.5%;transform:translateX(-50%);font-family:var(--hand-en);
+    font-size:13px;letter-spacing:.1em;color:#6b4152;cursor:pointer;
+    background:rgba(255,247,242,.8);padding:4px 14px;border-radius:16px;animation:bob 1.8s ease-in-out infinite}
+  .scroll-hint:hover{color:var(--ink);background:rgba(255,247,242,.95)}
+  @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
+
+  /* ===== 第二页：Internships（奶油底 + 粉色蜡笔笔触，和首页一致） ===== */
+  .internships{position:relative;overflow:hidden;padding:96px 0 110px;background:transparent}
+  .internships:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.14;z-index:1;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}
+  /* 涂鸦星星 */
+  .cstar{position:absolute;z-index:1;pointer-events:none;width:34px;height:34px}
+  .cstar.s1{left:6%;top:60%;transform:rotate(12deg)}
+  .cstar.s2{right:7%;top:14%;width:44px;height:44px;transform:rotate(-8deg)}
+  .cstar.s3{left:46%;bottom:9%;width:26px;height:26px;transform:rotate(20deg)}
+  .intern-wrap{position:relative;z-index:2;width:min(1240px,calc(100% - 56px));margin:auto}
+  .page-mark{display:inline-block;font-family:var(--hand-en);font-size:12px;letter-spacing:.22em;
+    border:2.5px solid var(--ink);border-radius:14px 10px 16px 9px;padding:5px 12px;transform:rotate(-2deg);background:rgba(255,255,255,.82);
+    filter:url(#crayonRough);box-shadow:3px 3px 0 rgba(43,43,43,.12)}
+  .intern-head{display:flex;align-items:flex-end;justify-content:space-between;margin:14px 0 40px;flex-wrap:wrap;gap:16px}
+  .intern-head h2{margin:0;font-family:var(--hand-en);font-size:clamp(54px,7vw,92px);font-weight:700;line-height:.95;letter-spacing:-.03em;
+    text-shadow:.7px .7px 0 rgba(43,43,43,.16)}
+  .intern-head .sub{font-family:var(--hand-en);font-size:15px;color:#7a5866;max-width:330px;line-height:1.5;transform:rotate(1.5deg)}
+  .intern-grid{display:grid;grid-template-columns:1.18fr .82fr;gap:52px;align-items:start}
+
+  /* 翻页卡片堆 */
+  .flip-deck{position:relative;height:560px;perspective:1600px}
+  .flip-card{position:absolute;left:50%;top:50%;width:min(100%,540px);background:#FFFEFC;border:4px solid var(--ink);
+    border-radius:250px 16px 240px 18px/18px 240px 16px 250px;box-shadow:12px 14px 0 rgba(43,43,43,.16);
+    padding:14px 14px 18px;transform-style:preserve-3d;will-change:transform,opacity;cursor:pointer;
+    transform:translate(-50%,-50%) translateY(-12px) rotate(-1.2deg);z-index:3}
+  .flip-card img{border-radius:5px;filter:saturate(1.05)}
+  /* 卡片纸面蜡笔颗粒（不套 filter，避免破坏 3D 翻转） */
+  .flip-card .paper-grain{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;opacity:.16;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E")}
+  .flip-card.is-back{transform:translate(-50%,-50%) translateY(58px) rotate(1.5deg) scale(.94);z-index:2;opacity:.98}
+  .flip-card img{display:block;width:100%;height:auto;border:2px solid rgba(43,43,43,.35);border-radius:8px;background:#fff}
+  .flip-card .card-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 6px 10px}
+  .flip-card .co{font-family:var(--hand-en);font-weight:700;font-size:22px}
+  .flip-card.red .co{color:#4a6f91}
+  .flip-card.tencent .co{color:#7a5490}
+  .flip-card .view{font-family:var(--hand-en);font-size:12px;letter-spacing:.04em;border:2px solid var(--ink);
+    border-radius:20px;padding:5px 10px;background:var(--butter);cursor:pointer;white-space:nowrap;transition:transform .15s}
+  .flip-card .view:hover{transform:rotate(-3deg) scale(1.05)}
+  .flip-tools{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:2px;flex-wrap:wrap}
+  .flip-btn{font-family:var(--hand-en);font-size:16px;font-weight:700;border:3px solid var(--ink);border-radius:255px 14px 225px 16px/16px 225px 16px 255px;
+    background:#FFFEFC;padding:10px 20px;cursor:pointer;box-shadow:5px 6px 0 rgba(43,43,43,.18);transition:transform .15s,box-shadow .15s;
+    filter:url(#crayonRough)}
+  .flip-btn:hover{transform:translate(-2px,-2px);box-shadow:8px 9px 0 rgba(43,43,43,.2)}
+  .flip-btn:active{transform:translate(2px,2px);box-shadow:2px 3px 0 rgba(43,43,43,.2)}
+  .link-status{font-family:var(--hand-en);font-size:13px;color:#7a5866;min-height:18px;text-align:center}
+
+  /* 右侧文案 + 雷达 */
+  .info-panel{background:#FFFEFC;border:3px solid var(--ink);border-radius:225px 16px 255px 14px/16px 245px 14px 255px;
+    padding:24px 26px 26px;box-shadow:8px 9px 0 rgba(43,43,43,.14);filter:url(#crayonRough)}
+  .info-panel .job,.info-panel h3,.info-panel .identity,.info-panel .dates,.info-panel .sep{filter:none}
+  .info-panel .job{font-family:var(--hand-en);font-size:13px;letter-spacing:.06em;color:#8a6a76}
+  .info-panel h3{margin:6px 0 2px;font-family:var(--hand-en);font-size:30px;font-weight:700}
+  .info-panel .identity{font-family:var(--hand-cn);font-size:17px;color:#5a4650;margin-bottom:4px}
+  .info-panel .dates{font-family:var(--hand-en);font-size:14px;color:#7a5866}
+  .info-panel .sep{height:3px;background:var(--ink);border-radius:3px;margin:16px 0;transform:rotate(-.5deg)}
+  .radar-wrap{position:relative;width:100%;margin:4px auto 2px}
+  .radar{display:none;width:100%;height:auto;overflow:visible}
+  .radar.active{display:block}
+  .radar .grid{fill:none;stroke:#E7A9C0;stroke-width:1.5;stroke-dasharray:5 5}
+  .radar .grid.full{stroke:#C98BA6;stroke-width:2.4;stroke-dasharray:7 5;filter:url(#crayonRough)}
+  .radar .axis{stroke:#C98BA6;stroke-width:1.4}
+  .radar .shape{stroke:#E0789F;stroke-width:3.4;stroke-linejoin:round;fill:rgba(240,168,200,.34)}
+  .radar .dot{fill:#FFFEFC;stroke:#C0527F;stroke-width:2.6}
+  .radar .lbl{font-family:var(--hand-en);font-size:14px;fill:#4a3540;font-weight:700}
+  .radar .val{font-family:var(--hand-en);font-size:11px;fill:#8a6a76}
+  .info-foot{font-family:var(--hand-en);font-size:12px;color:#8a6a76;text-align:center;margin-top:6px;letter-spacing:.04em}
+
+  /* ===== 第三页：Rednote 项目导航 ===== */
+  .projects{position:relative;overflow:hidden;padding:80px 0 110px;background:transparent}
+  .projects:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.13;z-index:1;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}
+  .proj-wrap{position:relative;z-index:2;width:min(1320px,calc(100% - 56px));margin:auto}
+  .proj-head{margin:8px 0 40px}
+  .proj-head h2{font-family:var(--hand-en);font-size:clamp(50px,7vw,86px);margin:6px 0 4px;letter-spacing:-.03em;line-height:1}
+  .proj-head .sub{font:15px var(--hand-cn);color:#7a5866;transform:rotate(1deg)}
+  .proj-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;align-items:stretch}
+  .proj-card{position:relative;display:flex;flex-direction:column;background:#FFFEFC;border:4px solid var(--ink);
+    border-radius:240px 16px 230px 18px/18px 230px 16px 245px;box-shadow:10px 12px 0 rgba(43,43,43,.15);
+    padding:20px 18px 18px;cursor:pointer;text-align:left;min-height:520px;overflow:hidden;
+    transition:transform .28s cubic-bezier(.2,.8,.2,1),box-shadow .28s,background .28s;
+    opacity:0;transform:translateY(34px) rotate(var(--tilt,0deg))}
+  .proj-card.in{opacity:1;transform:translateY(0) rotate(var(--tilt,0deg))}
+  .proj-card:hover,.proj-card:focus-visible{transform:translateY(-9px) rotate(0deg) scale(1.02);
+    box-shadow:16px 20px 0 rgba(43,43,43,.2);background:#fff;outline:none;z-index:5}
+  .proj-card:active{transform:translateY(-3px) scale(.99)}
+  .proj-card:nth-child(1){--tilt:-2.5deg}
+  .proj-card:nth-child(2){--tilt:1.5deg}
+  .proj-card:nth-child(3){--tilt:-1.5deg}
+  .proj-card .num{position:absolute;right:14px;top:-16px;font:900 40px var(--hand-en);color:var(--pink-deep);
+    -webkit-text-stroke:2px var(--ink);background:#FFFEFC;border:3px solid var(--ink);border-radius:50%;
+    width:52px;height:52px;display:grid;place-items:center;transform:rotate(8deg)}
+  .proj-card h3{font-family:var(--hand-cn);font-size:24px;line-height:1.3;margin:6px 0 14px;min-height:64px;
+    display:flex;align-items:flex-start;gap:4px}
+  .proj-card h3 .br{color:var(--pink-deep);font-family:var(--hand-en)}
+  .proj-card .media{flex:1;display:flex;align-items:center;justify-content:center;background:#FFFBF8;
+    border:2px dashed rgba(43,43,43,.32);border-radius:10px;padding:10px;overflow:hidden}
+  .proj-card .media img,.proj-card .media svg{width:100%;height:100%;object-fit:contain;display:block}
+  .proj-card .go{margin-top:14px;font:700 13px var(--hand-en);letter-spacing:.06em;text-align:center;
+    border:2.5px solid var(--ink);border-radius:20px;padding:7px 10px;background:var(--butter);transform:rotate(-1deg)}
+  .proj-card:hover .go{background:var(--pink)}
+  @media(max-width:900px){
+    .stage{width:calc(100% - 32px);height:auto;min-height:0;padding:36px 0 120px}
+    .pink-paper{top:1%;bottom:2%}
+    .card,.hero-center,.welcome,.foot{position:relative;inset:auto;right:auto;left:auto;top:auto;bottom:auto;transform:none}
+    .card{width:min(280px,80%);margin:0 auto 18px}
+    .card-cv,.card-dream,.card-intern{margin-left:auto;margin-right:auto}
+    .card:hover,.card:focus-visible,.card-cv:hover,.card-cv:focus-visible,
+    .card-dream:hover,.card-dream:focus-visible,.card-intern:hover,.card-intern:focus-visible{transform:scale(1.02)}
+    .hero-center{width:min(360px,92%);margin:26px auto 40px}
+    .welcome{width:min(340px,92%);margin:0 auto;text-align:center}
+    .welcome h1{font-size:40px}
+    .welcome .squiggle{margin-left:auto;margin-right:auto}
+    .foot{margin:34px auto 0;text-align:center;white-space:normal;font-size:10px;line-height:1.6;padding:0 8px}
+    .doodle{opacity:.7}
+    .internships{padding:70px 0 80px}
+    .intern-wrap{width:calc(100% - 32px)}
+    .intern-head h2{font-size:56px}
+    .intern-grid{grid-template-columns:1fr;gap:34px}
+    .flip-deck{height:auto;display:flex;flex-direction:column;align-items:center;gap:26px;perspective:none}
+    .flip-card{position:relative;left:auto;top:auto;transform:none!important;opacity:1!important;width:min(100%,420px)}
+    .flip-tools{order:3}
+    .link-status{order:4}
+    .radar .lbl{font-size:16px}
+    .projects{padding:60px 0 80px}
+    .proj-wrap{width:calc(100% - 32px)}
+    .proj-grid{grid-template-columns:1fr;gap:26px}
+    .proj-card{min-height:0;transform:none;opacity:1}
+    .proj-card .media{min-height:190px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .card,.portrait{transition:none}
+  }
+</style>
 </head>
 <body>
-  <nav><a class="brand" href="#top">陈之玉 / CY</a><div class="navlinks"><a href="#tencent">Tencent</a><a href="#xhs">Xiaohongshu</a><a href="#about">About</a></div></nav>
-  <header class="hero wrap" id="top">
-    <div class="hero-copy reveal">
-      <span class="eyebrow">AI Product Manager · Portfolio 2025</span>
-      <h1>在浪潮中<br><em>做有意思的事</em></h1>
-      <p class="hero-intro">曾在腾讯文档、小红书负责 AI 与国际化方向的产品工作。善于把复杂模型能力，做成用户可理解、可完成、可持续使用的产品体验。</p>
-      <div class="hero-meta"><span>AI PRODUCT</span><span>CONTENT</span><span>GLOBALIZATION</span></div>
+<!-- 蜡笔粗糙滤镜：让描边呈现手绘毛边 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="crayonRough" x="-20%" y="-20%" width="140%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="3" seed="7" result="noise"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <!-- 蜡笔干刷：边缘扭曲 + 高频颗粒挖空，露出纸底 -->
+  <filter id="crayonBrush" x="-20%" y="-20%" width="140%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="3" seed="4" result="warp"/>
+    <feDisplacementMap in="SourceGraphic" in2="warp" scale="38" xChannelSelector="R" yChannelSelector="G" result="rough"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.3 0.07" numOctaves="3" seed="13" result="grain"/>
+    <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  .62 .62 .62 0 -.26" result="grainA"/>
+    <feComposite in="rough" in2="grainA" operator="in"/>
+  </filter>
+  <!-- 连续蜡笔笔刷背景（覆盖两页）：柔和浅粉，深粉面积收小 -->
+  <symbol id="crayonScene" viewBox="0 0 1440 2700" preserveAspectRatio="none">
+    <g filter="url(#crayonBrush)">
+      <!-- 第一页 左上：大面积浅粉 + 小面积稍深 -->
+      <path d="M-30 -20 L350 -30 Q400 90 310 190 Q220 260 60 230 L-30 180 Z" fill="#F7C9D9" opacity=".8"/>
+      <path d="M-20 40 Q130 30 220 110 Q260 170 170 210 Q55 230 -20 190 Z" fill="#F4AFC8" opacity=".55"/>
+      <!-- 第一页 右上小笔刷 -->
+      <path d="M1240 -20 L1470 -20 L1470 170 Q1370 140 1300 90 Q1250 40 1240 -20 Z" fill="#F7C9D9" opacity=".7"/>
+      <!-- 第一页 左下小点缀 -->
+      <path d="M-20 640 Q120 620 210 680 Q180 740 60 720 L-20 700 Z" fill="#F7C9D9" opacity=".6"/>
+      <!-- 过渡带 1→2 -->
+      <path d="M1180 820 Q1360 800 1470 860 L1470 1010 Q1340 980 1230 900 Z" fill="#FBE0EA" opacity=".6"/>
+      <!-- 第二页 右上 -->
+      <path d="M1360 1020 L1470 1020 L1470 1300 Q1410 1260 1370 1180 Z" fill="#F7C9D9" opacity=".6"/>
+      <path d="M-30 1600 Q300 1560 600 1630 Q900 1700 1180 1610 Q1360 1560 1470 1610 L1470 1830 L-30 1830 Z" fill="#F7C9D9" opacity=".7"/>
+      <!-- 过渡带 2→3 -->
+      <path d="M-20 1840 Q200 1810 330 1870 Q280 1930 90 1900 L-20 1890 Z" fill="#FBE0EA" opacity=".6"/>
+      <!-- 第三页 左上 / 右下浅粉 -->
+      <path d="M-30 1980 L250 1970 Q300 2070 220 2150 Q140 2200 -30 2160 Z" fill="#F7C9D9" opacity=".6"/>
+      <path d="M1200 2100 Q1340 2080 1470 2140 L1470 2480 Q1350 2440 1260 2320 Z" fill="#F7C9D9" opacity=".55"/>
+      <!-- 底部大浅粉收尾 -->
+      <path d="M-30 2500 Q300 2460 600 2530 Q900 2600 1180 2510 Q1360 2460 1470 2510 L1470 2730 L-30 2730 Z" fill="#F7C9D9" opacity=".75"/>
+      <path d="M-20 2600 Q280 2560 560 2630 Q860 2700 1140 2620 Q1330 2570 1470 2610 L1470 2730 L-20 2730 Z" fill="#FBE0EA" opacity=".8"/>
+      <!-- 黄色小笔刷 -->
+      <path d="M1300 250 Q1350 235 1380 275 Q1355 315 1310 295 Z" fill="#F6D77A" opacity=".5"/>
+      <path d="M620 1690 Q680 1670 720 1710 Q700 1750 640 1730 Z" fill="#F6D77A" opacity=".45"/>
+      <path d="M1120 2280 Q1170 2265 1200 2305 Q1175 2345 1130 2325 Z" fill="#F6D77A" opacity=".5"/>
+    </g>
+  </symbol>
+</svg>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="page-flow">
+<svg class="crayon-bg" viewBox="0 0 1440 2700" preserveAspectRatio="none" aria-hidden="true"><use href="#crayonScene" width="1440" height="2700"/></svg>
+
+<main class="stage">
+
+  <!-- 涂鸦星星：显式写进 HTML 的手绘符号 -->
+  <span class="doodle d1" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 3 Q22 16 37 20 Q22 24 20 37 Q18 24 3 20 Q18 16 20 3Z" fill="#FFFEFC" stroke="#2B2B2B" stroke-width="2.6" stroke-linejoin="round"/></svg></span>
+  <span class="doodle d2" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 5 Q21 17 35 20 Q21 23 20 35 Q19 23 5 20 Q19 17 20 5Z" fill="#F6D77A" stroke="#2B2B2B" stroke-width="2.6" stroke-linejoin="round"/></svg></span>
+  <span class="doodle d3" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 5 Q22 17 35 20 Q22 23 20 35 Q18 23 5 20 Q18 17 20 5Z" fill="#B7A2D6" stroke="#2B2B2B" stroke-width="2.6" stroke-linejoin="round"/></svg></span>
+  <span class="doodle d4" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 3 Q22 16 37 20 Q22 24 20 37 Q18 24 3 20 Q18 16 20 3Z" fill="#9FC7E2" stroke="#2B2B2B" stroke-width="2.6" stroke-linejoin="round"/></svg></span>
+  <span class="doodle d5" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 5 Q22 17 35 20 Q22 23 20 35 Q18 23 5 20 Q18 17 20 5Z" fill="#A9D6BB" stroke="#2B2B2B" stroke-width="2.6" stroke-linejoin="round"/></svg></span>
+
+  <!-- 入口组件：CV 简历 -->
+  <button class="card card-cv" type="button" aria-label="Resume - about me">
+    <span class="t">Resume</span>
+    <span class="art" aria-hidden="true">
+      <svg viewBox="0 0 130 120">
+        <rect x="24" y="12" width="82" height="96" rx="7" fill="#EAF3E4" stroke="#2B2B2B" stroke-width="3"/>
+        <path d="M36 34 H94 M36 46 H94" stroke="#5B7A52" stroke-width="2.8" stroke-linecap="round"/>
+        <rect x="36" y="62" width="12" height="12" rx="2" fill="#FFFEFC" stroke="#2B2B2B" stroke-width="2.4"/>
+        <rect x="36" y="80" width="12" height="12" rx="2" fill="#FFFEFC" stroke="#2B2B2B" stroke-width="2.4"/>
+        <path d="M56 68 H92 M56 86 H92" stroke="#5B7A52" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M18 8 L30 4" stroke="#2B2B2B" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+    </span>
+    <span class="desc">Everything about me, starting right here.</span>
+  </button>
+
+  <!-- 入口组件：梦想 / 目标 -->
+  <button class="card card-dream" type="button" aria-label="Dreams and goals">
+    <span class="t">Dreams / Goals</span>
+    <span class="art" aria-hidden="true">
+      <svg viewBox="0 0 150 110">
+        <path d="M10 58 L138 12 L103 100 L76 74 L56 94 Z" fill="#DCEAF5" stroke="#2B2B2B" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M76 74 L138 12 M76 74 L103 100" stroke="#2B2B2B" stroke-width="2.6" stroke-linejoin="round"/>
+        <path d="M8 30 l6 -8 M20 22 l3 -9 M4 48 l-3 -6" stroke="#2B2B2B" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+    </span>
+    <span class="desc">The places to go, the person to become.</span>
+  </button>
+
+  <!-- 入口组件：实习经历 -->
+  <button class="card card-intern" type="button" aria-label="Internship experience">
+    <span class="t">Internships</span>
+    <span class="art" aria-hidden="true">
+      <svg viewBox="0 0 160 120">
+        <rect x="30" y="14" width="100" height="68" rx="6" fill="#EADFF2" stroke="#2B2B2B" stroke-width="3"/>
+        <circle cx="68" cy="40" r="2.6" fill="#2B2B2B"/><circle cx="92" cy="40" r="2.6" fill="#2B2B2B"/>
+        <path d="M68 50 Q80 62 92 50" fill="none" stroke="#2B2B2B" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M18 86 H142 L152 100 H8 Z" fill="#EADFF2" stroke="#2B2B2B" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M72 93 H88" stroke="#2B2B2B" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M136 12 l7 -8 M144 24 l9 -3 M130 4 l2 -8" stroke="#B7A2D6" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </span>
+    <span class="desc">AI product intern at Tencent &amp; Xiaohongshu.</span>
+  </button>
+
+  <!-- 中间：QQ人 跟随鼠标动效 -->
+  <section class="hero-center" aria-label="Character animation">
+    <div class="portrait">
+      <div class="tape" aria-hidden="true"></div>
+      <div class="ip-sprite" id="ipSprite" aria-hidden="true"></div>
     </div>
-    <div class="portrait-stage" aria-hidden="true"><div class="tape"></div><div class="portrait"></div><div class="stamp">产品思考<br>模型洞察<br>用户感受</div></div>
-  </header>
+  </section>
 
-  <main>
-    <section class="section wrap reveal" id="about">
-      <div class="label-row"><div><span class="eyebrow">Profile</span><h2 class="section-title">为什么是我</h2></div><div class="section-num">01</div></div>
-      <div class="about-grid">
-        <aside class="about-note"><h3>清醒而热烈，温柔而坚定。</h3><p>我相信好的产品来自长期观察、扎实拆解和敢于试错。文科训练赋予我表达与同理心，AI 实习练就了我与模型、用户、数据反复对话的能力。</p></aside>
-        <div><div class="stats"><div class="stat"><b>2</b><span>头部互联网实习</span></div><div class="stat"><b>AI</b><span>核心赛道</span></div><div class="stat"><b>C→G</b><span>跨端与全球化思维</span></div></div>
-          <div style="margin-top:35px"><h3 style="font-size:28px">核心能力</h3><p style="line-height:2">用户洞察 · 产品策略 · 原型与交互 · 模型评测 · 提示词工程 · 数据分析 · 跨团队协作</p></div>
+  <!-- 右侧手写欢迎语 -->
+  <div class="welcome">
+    <h1>Welcome to<br>Joy's Planet</h1>
+    <svg class="squiggle" viewBox="0 0 200 18" aria-hidden="true">
+      <path d="M4 11 Q26 2 52 12 T104 11 T156 12 T196 9" fill="none" stroke="#2B2B2B" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <div class="ready">ready, go! ✳</div>
+  </div>
+
+  <div class="foot">✦ ZHIYU CHEN · AI PRODUCT MANAGER ✦ &nbsp; ✦ MADE WITH LOVE ✦</div>
+  <div class="scroll-hint" id="scrollHint" role="button" tabindex="0">scroll down to explore ↓</div>
+</main>
+
+<!-- PAGE 02 · INTERNSHIPS -->
+<section class="internships" id="internships" aria-label="Internships">
+  <!-- 涂鸦星星 -->
+  <span class="cstar s1" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 2 Q23 16 38 20 Q23 24 20 38 Q17 24 2 20 Q17 16 20 2Z" fill="#F6D77A" stroke="#2B2B2B" stroke-width="3" stroke-linejoin="round"/></svg></span>
+  <span class="cstar s2" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 2 Q23 16 38 20 Q23 24 20 38 Q17 24 2 20 Q17 16 20 2Z" fill="#FFFEFC" stroke="#2B2B2B" stroke-width="3" stroke-linejoin="round"/></svg></span>
+  <span class="cstar s3" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 3 Q23 16 37 20 Q23 24 20 37 Q17 24 3 20 Q17 16 20 3Z" fill="#F6D77A" stroke="#2B2B2B" stroke-width="3" stroke-linejoin="round"/></svg></span>
+  <div class="intern-wrap">
+    <span class="page-mark">02 / INTERNSHIPS</span>
+    <div class="intern-head">
+      <h2>Internships</h2>
+      <p class="sub">Two chapters, one after another. Tap the pages to flip between them ✳</p>
+    </div>
+
+    <div class="intern-grid">
+      <!-- 左侧：翻页卡片堆 -->
+      <div>
+        <div class="flip-deck" id="flipDeck">
+          <article class="flip-card red is-front" id="cardRed" data-key="red">
+            <span class="paper-grain" aria-hidden="true"></span>
+            <div class="card-bar"><span class="co">Red note</span>
+              <button class="view" type="button" data-view="red">View details ↗</button></div>
+            <img src="./小红书实习.png" alt="Rednote AI PM - globalization and AI" />
+          </article>
+          <article class="flip-card tencent is-back" id="cardTencent" data-key="tencent">
+            <span class="paper-grain" aria-hidden="true"></span>
+            <div class="card-bar"><span class="co">Tencent Doc</span>
+              <button class="view" type="button" data-view="tencent">View details ↗</button></div>
+            <img src="./腾讯实习.png" alt="Tencent Doc AI PM - AI writing and layout" />
+          </article>
         </div>
+        <div class="flip-tools">
+          <button class="flip-btn" id="flipBtn" type="button">↻ Flip the page</button>
+        </div>
+        <p class="link-status" id="linkStatus"></p>
       </div>
-    </section>
 
-    <section class="project wrap reveal" id="tencent">
-      <div class="label-row"><span class="eyebrow">Internship 01 · 2024—2025</span><div class="section-num">02</div></div>
-      <div class="project-head"><div class="company-mark">T.</div><div><h3>腾讯文档 · AI 原生创作</h3><p>围绕 AI 写作与智能排版美化，从“模型能写什么”转向“用户在什么场景下，如何自然地完成创作与编辑”。</p><div class="role-tags"><span>AI 写作</span><span>智能排版</span><span>提示词架构</span><span>交互演进</span></div></div></div>
-      <div class="case-grid">
-        <article class="case"><span class="case-index">A</span><h4>AI 写作：给生成装上创作框架</h4><p>将“裸模型生成”的不确定性拆成可组合的能力。围绕人设、场景、技能、风格、叙事逻辑、行文结构与创作禁区建立提示词底座，并通过材料加工与 few-shot 持续校准。</p><div class="pipeline"><div class="step"><b>01 / 理解意图</b><span>识别场景与创作目的</span></div><div class="step"><b>02 / 提取约束</b><span>组织风格、结构与禁区</span></div><div class="step"><b>03 / 组合生成</b><span>调用模块化提示词管线</span></div><div class="step"><b>04 / 自动质检</b><span>裁判测评与人工打分</span></div></div></article>
-        <article class="case"><span class="case-index">B</span><h4>排版美化：从入口到所见即所得</h4><p>覆盖移动端、PC端、粘贴、新建、协作与导入等跨场景需求。交互从固定入口演进为复制粘贴后的即时推荐，同时保留模板库、上传模板和对话定制作为兜底。</p><div class="pipeline"><div class="step"><b>固定入口</b><span>用户主动寻找美化能力</span></div><div class="step"><b>场景推荐</b><span>在关键节点主动出现</span></div><div class="step"><b>即时预览</b><span>复制粘贴后所见即所得</span></div><div class="step"><b>深度定制</b><span>模板与对话满足个性需求</span></div></div></article>
-      </div>
-      <div class="metric-strip"><div class="metric"><b>2000+</b><span>移动端灰度 DAU</span><p>20% 流量灰度下达到稳定规模</p></div><div class="metric"><b>85%≈</b><span>移动端采纳率</span><p>即时推荐显著降低操作门槛</p></div><div class="metric"><b>+</b><span>新建量正向变化</span><p>空白文档更容易被转化为有效创作</p></div><div class="metric"><b>+</b><span>使用时长正向变化</span><p>能力更贴近用户真实编辑流程</p></div></div>
-    </section>
+      <!-- 右侧：对应文案 + 雷达图 -->
+      <aside class="info-panel" id="infoPanel">
+        <div class="job" id="infoJob">Job · Rednote AI PM</div>
+        <h3 id="infoCo">Red note</h3>
+        <div class="identity" id="infoIdentity">Rednote Translation Lead</div>
+        <div class="dates" id="infoDates">2026.6 – 2026.11</div>
+        <div class="sep"></div>
 
-    <section class="project wrap reveal" id="xhs">
-      <div class="label-row"><span class="eyebrow">Internship 02 · 2024—2025</span><div class="section-num">03</div></div>
-      <div class="project-head"><div class="company-mark xhs">X.</div><div><h3>小红书 · 全球化翻译与多模态</h3><p>负责视频字幕、全站翻译、自动翻译、源语言识别、AI 配音与图片翻译等多语种产品和模型工作。</p><div class="role-tags"><span>全站翻译</span><span>源语言识别</span><span>AI Dubbing</span><span>图片翻译</span></div></div></div>
-      <div class="case-grid">
-        <article class="case"><span class="case-index">C</span><h4>体验优化：让翻译适配真实场景</h4><p>视频字幕从视觉变量到横竖屏位置统一优化；字幕开关演进为“开关 + 固定目标语言”，降低理解成本。Web 全站翻译区分 SEO 与非 SEO 链路，并为自动翻译扩展多语种与用户偏好语言。</p><div class="timeline"><div class="phase"><b>发现问题</b><p>字幕遮挡、语种选择与站内外链路不一致。</p></div><div class="phase"><b>设计方案</b><p>统一语言模型、默认策略与关键交互。</p></div><div class="phase"><b>灰度验证</b><p>以时长与多语种体验指标校验效果。</p></div></div></article>
-        <article class="case"><span class="case-index">D</span><h4>模型迭代：从“会不会混语”到精确语种判断</h4><p>主导源语言识别由二分类升级为语种集合与占比判断。短文本通过字符阈值降级策略，中文笔记中的英文话题标签建立生产侧与消费侧双重判断，避免误翻。</p><div class="pipeline"><div class="step"><b>混语判断</b><span>初始二分类能力</span></div><div class="step"><b>语种集合</b><span>输出结果与占比</span></div><div class="step"><b>短文本降级</b><span>字符阈值策略</span></div><div class="step"><b>双层校验</b><span>规避话题误翻</span></div></div></article>
-      </div>
-      <div class="metric-strip"><div class="metric"><b>+2.42%</b><span>人均 APP 时长</span><p>小语种人群 iOS & 安卓联合实验</p></div><div class="metric"><b>+3.25%</b><span>APP 总时长</span><p>实验期间形成明确正向提升</p></div><div class="metric"><b>100%</b><span>主导语种准确率</span><p>相较初始约 70.8% 大幅提升</p></div><div class="metric"><b>96%</b><span>语种合集准确率</span><p>短文本与混语场景持续校准</p></div></div>
-      <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:24px"><article class="case" style="min-height:260px"><h4>AI Dubbing：评测配音全链路</h4><p>打通配音可用性、ASR、翻译与 TTS。翻译环节采用 0—2 分标准，在语义准确与配音语速间平衡。离线结果中，ASR 合格率提升至 <b>86.83%</b>，翻译合格率提升至 <b>89.11%</b>，TTS 双语合格率提升至 <b>64.30%</b>。</p></article><article class="case" style="min-height:260px"><h4>图片翻译：重定义“可接受”</h4><p>建立意图判断、可渲染性判断与高价值判断标注流程，对不可渲染、低价值、局部遮挡等 badcase 重新分类。让模型评估不只看文字识别，更关注用户看到的最终效果。</p></article></div>
-    </section>
+        <div class="radar-wrap">
+          <!-- Rednote radar: grid rings share one center (210,160); ring5 = full score 5 -->
+          <svg class="radar active" id="radarRed" viewBox="0 0 420 320" role="img" aria-label="Rednote skill radar">
+            <polygon class="grid" points="210,140 227.3,150 227.3,170 210,180 192.7,170 192.7,150"/>
+            <polygon class="grid" points="210,120 244.6,140 244.6,180 210,200 175.4,180 175.4,140"/>
+            <polygon class="grid" points="210,100 262,130 262,190 210,220 158,190 158,130"/>
+            <polygon class="grid" points="210,80 279.3,120 279.3,200 210,240 140.7,200 140.7,120"/>
+            <polygon class="grid full" points="210,60 296.6,110 296.6,210 210,260 123.4,210 123.4,110"/>
+            <line class="axis" x1="210" y1="160" x2="210" y2="60"/>
+            <line class="axis" x1="210" y1="160" x2="296.6" y2="110"/>
+            <line class="axis" x1="210" y1="160" x2="296.6" y2="210"/>
+            <line class="axis" x1="210" y1="160" x2="210" y2="260"/>
+            <line class="axis" x1="210" y1="160" x2="123.4" y2="210"/>
+            <line class="axis" x1="210" y1="160" x2="123.4" y2="110"/>
+            <polygon class="shape" points="210,70 279.3,120 287.9,205 210,240 158,190 140.7,120"/>
+            <circle class="dot" cx="210" cy="70" r="4.5"/><circle class="dot" cx="279.3" cy="120" r="4.5"/>
+            <circle class="dot" cx="287.9" cy="205" r="4.5"/><circle class="dot" cx="210" cy="240" r="4.5"/>
+            <circle class="dot" cx="158" cy="190" r="4.5"/><circle class="dot" cx="140.7" cy="120" r="4.5"/>
+            <text class="lbl" x="210" y="28" text-anchor="middle">Feature design</text>
+            <text class="val" x="210" y="46" text-anchor="middle">4.5</text>
+            <text class="lbl" x="320.9" y="100" text-anchor="start">User insight</text>
+            <text class="val" x="320.9" y="116" text-anchor="start">4.0</text>
+            <text class="lbl" x="320.9" y="228" text-anchor="start">Model eval</text>
+            <text class="val" x="320.9" y="244" text-anchor="start">4.5</text>
+            <text class="lbl" x="210" y="304" text-anchor="middle">i18n</text>
+            <text class="val" x="210" y="288" text-anchor="middle">4.0</text>
+            <text class="lbl" x="99.1" y="228" text-anchor="end">Vibe coding</text>
+            <text class="val" x="99.1" y="244" text-anchor="end">3.0</text>
+            <text class="lbl" x="99.1" y="100" text-anchor="end">Data analysis</text>
+            <text class="val" x="99.1" y="116" text-anchor="end">4.0</text>
+          </svg>
 
-    <section class="closing reveal"><span class="eyebrow">Thank you for reading</span><h2>愿我们相逢</h2><p>我叫陈之玉，期待把热爱与思考，变成真正有价值的产品。</p></section>
-  </main>
-  <footer><div class="wrap footer-inner"><span>CHEN ZHIYU · PORTFOLIO</span><span>AI PRODUCT / CONTENT / GLOBALIZATION</span></div></footer>
-  <script>
-    const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')}),{threshold:.12});
-    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
-  </script>
+          <!-- Tencent radar: same grid geometry; data sits on the matching axes -->
+          <svg class="radar" id="radarTencent" viewBox="0 0 420 320" role="img" aria-label="Tencent skill radar">
+            <polygon class="grid" points="210,140 227.3,150 227.3,170 210,180 192.7,170 192.7,150"/>
+            <polygon class="grid" points="210,120 244.6,140 244.6,180 210,200 175.4,180 175.4,140"/>
+            <polygon class="grid" points="210,100 262,130 262,190 210,220 158,190 158,130"/>
+            <polygon class="grid" points="210,80 279.3,120 279.3,200 210,240 140.7,200 140.7,120"/>
+            <polygon class="grid full" points="210,60 296.6,110 296.6,210 210,260 123.4,210 123.4,110"/>
+            <line class="axis" x1="210" y1="160" x2="210" y2="60"/>
+            <line class="axis" x1="210" y1="160" x2="296.6" y2="110"/>
+            <line class="axis" x1="210" y1="160" x2="296.6" y2="210"/>
+            <line class="axis" x1="210" y1="160" x2="210" y2="260"/>
+            <line class="axis" x1="210" y1="160" x2="123.4" y2="210"/>
+            <line class="axis" x1="210" y1="160" x2="123.4" y2="110"/>
+            <polygon class="shape" points="210,80 270.6,125 296.6,210 210,220 123.4,210 140.7,120"/>
+            <circle class="dot" cx="210" cy="80" r="4.5"/><circle class="dot" cx="270.6" cy="125" r="4.5"/>
+            <circle class="dot" cx="296.6" cy="210" r="4.5"/><circle class="dot" cx="210" cy="220" r="4.5"/>
+            <circle class="dot" cx="123.4" cy="210" r="4.5"/><circle class="dot" cx="140.7" cy="120" r="4.5"/>
+            <text class="lbl" x="210" y="28" text-anchor="middle">Feature design</text>
+            <text class="val" x="210" y="46" text-anchor="middle">4.0</text>
+            <text class="lbl" x="320.9" y="100" text-anchor="start">User insight</text>
+            <text class="val" x="320.9" y="116" text-anchor="start">3.5</text>
+            <text class="lbl" x="320.9" y="228" text-anchor="start">Prompt eng.</text>
+            <text class="val" x="320.9" y="244" text-anchor="start">5.0</text>
+            <text class="lbl" x="210" y="304" text-anchor="middle">Model eval</text>
+            <text class="val" x="210" y="288" text-anchor="middle">3.0</text>
+            <text class="lbl" x="99.1" y="228" text-anchor="end">Vibe coding</text>
+            <text class="val" x="99.1" y="244" text-anchor="end">5.0</text>
+            <text class="lbl" x="99.1" y="100" text-anchor="end">Data analysis</text>
+            <text class="val" x="99.1" y="116" text-anchor="end">4.0</text>
+          </svg>
+        </div>
+        <div class="info-foot" id="infoFoot">✦ skill radar · 5-point scale ✦</div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE 03 · REDNOTE PROJECTS -->
+<section class="projects" id="projects" aria-label="Rednote projects">
+  <div class="proj-wrap">
+    <div class="proj-head">
+      <span class="page-mark">03 / PROJECTS</span>
+      <h2>Rednote</h2>
+    </div>
+
+    <div class="proj-grid">
+      <!-- 卡片 1：源语言模型（手绘思维导图） -->
+      <button class="proj-card" type="button" data-proj="language" aria-label="源语言模型">
+        <span class="num">1</span>
+        <h3><span class="br">{</span>源语言模型<span class="br">}</span></h3>
+        <span class="media">
+          <svg viewBox="0 0 1280 620" role="img" aria-label="源语言识别模型思维导图">
+            <g filter="url(#crayonRough)" font-family="'Xingkai SC','Kaiti SC',cursive" font-size="21">
+              <!-- 中心 -->
+              <rect x="520" y="266" width="240" height="88" rx="16" fill="#F7C9D9" stroke="#2B2B2B" stroke-width="3.5"/>
+              <text x="640" y="300" text-anchor="middle" font-weight="700">源语言识别</text>
+              <text x="640" y="330" text-anchor="middle" font-weight="700">模型评测</text>
+              <!-- 分支1 三次迭代 -->
+              <path d="M520 300 Q370 250 300 160" fill="none" stroke="#2B2B2B" stroke-width="3"/>
+              <rect x="120" y="60" width="250" height="62" rx="14" fill="#EAF3E4" stroke="#2B2B2B" stroke-width="3"/>
+              <text x="245" y="99" text-anchor="middle" font-weight="700">三次迭代 · 8月</text>
+              <rect x="95" y="150" width="150" height="48" rx="12" fill="#fff" stroke="#2B2B2B" stroke-width="2.6"/>
+              <text x="170" y="181" text-anchor="middle">V1 70.8%</text>
+              <rect x="262" y="150" width="150" height="48" rx="12" fill="#fff" stroke="#2B2B2B" stroke-width="2.6"/>
+              <text x="337" y="181" text-anchor="middle">V2 80%</text>
+              <rect x="429" y="150" width="160" height="48" rx="12" fill="#F6D77A" stroke="#2B2B2B" stroke-width="2.6"/>
+              <text x="509" y="181" text-anchor="middle" font-weight="700">V3 96% ✓</text>
+              <path d="M245 122 L170 150 M245 122 L337 150 M400 174 L429 174" fill="none" stroke="#2B2B2B" stroke-width="2.4"/>
+              <!-- 分支2 短文本降级 -->
+              <path d="M640 266 Q640 190 780 150" fill="none" stroke="#2B2B2B" stroke-width="3"/>
+              <rect x="720" y="60" width="270" height="62" rx="14" fill="#DCEAF5" stroke="#2B2B2B" stroke-width="3"/>
+              <text x="855" y="99" text-anchor="middle" font-weight="700">短文本降级 · 9.10</text>
+              <rect x="745" y="150" width="230" height="48" rx="12" fill="#fff" stroke="#2B2B2B" stroke-width="2.6"/>
+              <text x="860" y="181" text-anchor="middle">&lt;50字符 → 单语种</text>
+              <!-- 分支3 中文笔记降级 -->
+              <path d="M760 354 Q900 400 960 470" fill="none" stroke="#2B2B2B" stroke-width="3"/>
+              <rect x="840" y="470" width="330" height="62" rx="14" fill="#EADFF2" stroke="#2B2B2B" stroke-width="3"/>
+              <text x="1005" y="509" text-anchor="middle" font-weight="700">中文笔记降级 · 9.14</text>
+              <rect x="880" y="548" width="250" height="48" rx="12" fill="#fff" stroke="#2B2B2B" stroke-width="2.6"/>
+              <text x="1005" y="579" text-anchor="middle">英文话题 → V1优先</text>
+              <!-- 成果 -->
+              <path d="M520 340 Q360 420 300 470" fill="none" stroke="#2B2B2B" stroke-width="3"/>
+              <rect x="90" y="470" width="290" height="62" rx="14" fill="#FCE3EC" stroke="#2B2B2B" stroke-width="3"/>
+              <text x="235" y="509" text-anchor="middle" font-weight="700">成果 · 合集 70.8→96%</text>
+              <rect x="120" y="548" width="230" height="48" rx="12" fill="#fff" stroke="#2B2B2B" stroke-width="2.6"/>
+              <text x="235" y="579" text-anchor="middle">消费时长 ↑</text>
+            </g>
+          </svg>
+        </span>
+        <span class="go">Open project ↗</span>
+      </button>
+
+      <!-- 卡片 2：图片翻译 -->
+      <button class="proj-card" type="button" data-proj="image" aria-label="图片翻译规则与标注SOP">
+        <span class="num">2</span>
+        <h3><span class="br">{</span>图片翻译规则与标注 SOP<span class="br">}</span></h3>
+        <span class="media"><img src="./图片翻译标注SOP.png" alt="图片翻译标注 SOP 流程图" /></span>
+        <span class="go">Open project ↗</span>
+      </button>
+
+      <!-- 卡片 3：AI dubbing -->
+      <button class="proj-card" type="button" data-proj="dubbing" aria-label="AI dubbing评估标注流程">
+        <span class="num">3</span>
+        <h3><span class="br">{</span>AI dubbing 评估标注流程<span class="br">}</span></h3>
+        <span class="media"><img src="./AI-dubbing评估标注流程-cropped.png" alt="AI dubbing 评估标注流程图" /></span>
+        <span class="go">Open project ↗</span>
+      </button>
+    </div>
+  </div>
+</section>
+</div><!-- /.page-flow -->
+
+<!-- 跟随鼠标动效运行时 + 初始化（资源来自 ip-motion-web 文件夹） -->
+<script src="./ip-motion-web/frame-scrub.js"></script>
+<script>
+(function(){
+  var el = document.getElementById('ipSprite');
+  if(!el || !window.OilMotion) return;
+  var spriteRender = window.OilMotion.createCssSpriteRenderer(el, 5, 5);
+  // 图集只有 24 帧（第 25 格是空白）。运行时四舍五入偶尔会得到帧号 24，
+  // 这里对 24 取模回绕到 0，避免切到空白帧导致角色“消失”。
+  var render = function(frame){ spriteRender(((frame % 24) + 24) % 24); };
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var animator = window.OilMotion.createFrameAnimator({
+    frameCount: 24,
+    circular: true,
+    initialFrame: 0,
+    smoothTime: 0.09,
+    maxSpeed: 24 * 2.2,
+    reducedMotion: reduce,
+    render: render
+  });
+  window.addEventListener('pointermove', function(e){
+    var r = el.getBoundingClientRect();
+    animator.setDirection(
+      e.clientX - (r.left + r.width / 2),
+      e.clientY - (r.top + r.height / 2)
+    );
+  }, {passive:true});
+})();
+</script>
+
+<!-- 第二页交互：翻页 + 文案/雷达切换 + 下翻导航 -->
+<script>
+(function(){
+  var redEl = document.getElementById('cardRed');
+  var tenEl = document.getElementById('cardTencent');
+  if(!redEl || !tenEl) return;
+
+  var DATA = {
+    red:     { job:'Rednote AI PM',     co:'Red note',    identity:'Rednote Translation Lead', dates:'2026.6 – 2026.11', name:'Rednote' },
+    tencent: { job:'Tencent Doc AI PM', co:'Tencent Doc', identity:'AI Writing Lead',          dates:'2026.1 – 2026.5',  name:'Tencent Doc' }
+  };
+  var cards = { red:redEl, tencent:tenEl };
+  var FRONT_T = 'translate(-50%,-50%) translateY(-12px) rotate(-1.2deg)';
+  var BACK_T  = 'translate(-50%,-50%) translateY(58px) rotate(1.5deg) scale(.94)';
+  var front = 'red';
+  var busy = false;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function applyStatic(){
+    Object.keys(cards).forEach(function(k){
+      var el = cards[k], isFront = (k === front);
+      el.style.transform = isFront ? FRONT_T : BACK_T;
+      el.style.zIndex    = isFront ? 3 : 2;
+      el.style.opacity   = isFront ? 1 : .98;
+      el.classList.toggle('is-front', isFront);
+      el.classList.toggle('is-back', !isFront);
+    });
+  }
+  function updateInfo(){
+    var d = DATA[front];
+    document.getElementById('infoJob').textContent      = 'Job · ' + d.job;
+    document.getElementById('infoCo').textContent       = d.co;
+    document.getElementById('infoIdentity').textContent = d.identity;
+    document.getElementById('infoDates').textContent    = d.dates;
+    document.getElementById('radarRed').classList.toggle('active', front === 'red');
+    document.getElementById('radarTencent').classList.toggle('active', front === 'tencent');
+  }
+  function flip(){
+    if(busy) return;
+    var next = (front === 'red') ? 'tencent' : 'red';
+    if(reduce){
+      front = next; applyStatic(); updateInfo(); return;
+    }
+    busy = true;
+    var outgoing = cards[front], incoming = cards[next];
+    incoming.style.zIndex = 4;
+    var opt = {duration:880, easing:'cubic-bezier(.55,.06,.3,1)', fill:'forwards'};
+    var a1 = outgoing.animate([
+      {transform:FRONT_T, opacity:1, offset:0},
+      {transform:'translate(-50%,-50%) translateY(-48px) rotateX(-82deg) rotate(-1.2deg)', opacity:.85, offset:.5},
+      {transform:BACK_T, opacity:.98, offset:1}
+    ], opt);
+    var a2 = incoming.animate([
+      {transform:BACK_T, opacity:.98, offset:0},
+      {transform:'translate(-50%,-50%) translateY(18px) rotateX(80deg) rotate(1.5deg) scale(.98)', opacity:.95, offset:.5},
+      {transform:FRONT_T, opacity:1, offset:1}
+    ], opt);
+    // 用定时器提交最终状态：不依赖动画 finished Promise，避免个别环境不 resolve 导致卡死
+    setTimeout(function(){
+      front = next;
+      applyStatic();
+      try { a1.cancel(); a2.cancel(); } catch(err) {}
+      updateInfo();
+      document.getElementById('linkStatus').textContent = '';
+      busy = false;
+    }, 900);
+  }
+
+  document.getElementById('flipBtn').addEventListener('click', flip);
+  redEl.addEventListener('click', flip);
+  tenEl.addEventListener('click', flip);
+
+  // 卡片内的“View details”：Rednote 跳到项目导航页；Tencent 暂为占位文本
+  var status = document.getElementById('linkStatus');
+  Array.prototype.forEach.call(document.querySelectorAll('[data-view]'), function(btn){
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var key = btn.getAttribute('data-view');
+      if(key === 'red'){
+        var proj = document.getElementById('projects');
+        if(proj) proj.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'});
+      } else {
+        status.textContent = 'Opening ' + DATA[key].name + ' case study… (link coming soon)';
+      }
+    });
+  });
+
+  // 第三页：卡片进入动画 + 点击占位
+  var projCards = document.querySelectorAll('.proj-card');
+  if('IntersectionObserver' in window){
+    var po = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          var i = Array.prototype.indexOf.call(projCards, en.target);
+          setTimeout(function(){ en.target.classList.add('in'); }, reduce ? 0 : i * 130);
+          po.unobserve(en.target);
+        }
+      });
+    }, {threshold:.18});
+    Array.prototype.forEach.call(projCards, function(c){ po.observe(c); });
+  } else {
+    Array.prototype.forEach.call(projCards, function(c){ c.classList.add('in'); });
+  }
+  // 首页 Internships 卡片 / 下翻提示 → 平滑滚动到第二页
+  function toSection(e){
+    if(e) e.preventDefault();
+    var target = document.getElementById('internships');
+    if(target) target.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'});
+  }
+  var internCard = document.querySelector('.card-intern');
+  if(internCard) internCard.addEventListener('click', toSection);
+  var hint = document.getElementById('scrollHint');
+  if(hint){
+    hint.addEventListener('click', toSection);
+    hint.addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' '){ toSection(e); } });
+  }
+
+  applyStatic();
+  updateInfo();
+})();
+</script>
 </body>
 </html>

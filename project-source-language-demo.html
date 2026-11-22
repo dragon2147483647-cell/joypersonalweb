@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>源语言识别模型评测 · Interactive Demo</title>
+<style>
+  :root{
+    --paper:#FFF7F2; --pink:#F7C9D9; --pink-soft:#FCE3EC; --pink-deep:#EA9FBB;
+    --ink:#2B2B2B; --lilac:#B7A2D6; --sky:#9FC7E2; --butter:#F6D77A; --mint:#A9D6BB;
+    --hand-cn:"Xingkai SC","STXingkai","Kaiti SC","STKaiti","KaiTi",cursive;
+    --hand-en:"Comic Sans MS","Chalkboard SE","Marker Felt","Segoe Print",cursive;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;color:var(--ink);font-family:var(--hand-cn);background:var(--paper);overflow-x:hidden;
+    background-image:
+      radial-gradient(ellipse 55% 20% at 2% 1%,rgba(247,201,217,.5),transparent 70%),
+      radial-gradient(ellipse 40% 14% at 99% 3%,rgba(247,201,217,.36),transparent 72%),
+      radial-gradient(ellipse 60% 12% at 50% 99%,rgba(247,201,217,.4),transparent 72%)}
+  .grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.18;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}
+  .wrap{width:min(1080px,calc(100% - 40px));margin:auto;position:relative;z-index:2}
+  h1,h2,h3{font-family:var(--hand-en)}
+  .eyebrow{display:inline-block;font:700 12px var(--hand-en);letter-spacing:.16em;border:2px solid var(--ink);
+    border-radius:14px 9px 16px 10px;padding:4px 12px;background:rgba(255,255,255,.8);transform:rotate(-2deg)}
+
+  /* hero */
+  .hero{padding:70px 0 40px;text-align:center}
+  .hero h1{font-size:clamp(40px,6vw,72px);line-height:1;margin:20px 0 12px;letter-spacing:-.03em}
+  .hero .lead{max-width:760px;margin:20px auto 0;font-size:18px;line-height:1.9;color:#5a4650}
+  .hero .tags{margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .hero .tags span{font:700 12px var(--hand-en);border:2px solid var(--ink);border-radius:999px;padding:6px 12px;transform:rotate(-1deg)}
+  .hero .tags span:nth-child(2){transform:rotate(2deg)} .hero .tags span:nth-child(3){transform:rotate(-2deg)}
+
+  /* section */
+  section.block{padding:56px 0;border-top:2px dashed rgba(43,43,43,.25)}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+  .sec-num{font:900 54px var(--hand-en);color:var(--pink-deep);line-height:.7}
+  .sec-head h2{font-size:clamp(32px,5vw,52px);margin:0;line-height:1}
+  .sec-head .hint{font:14px var(--hand-cn);color:#9a7a86}
+
+  .card{background:#FFFEFC;border:3px solid var(--ink);border-radius:250px 16px 240px 18px/18px 240px 16px 250px;
+    box-shadow:7px 8px 0 rgba(43,43,43,.13);padding:24px 28px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+
+  /* why */
+  .why-flow{display:grid;grid-template-columns:1fr 60px 1fr;gap:14px;align-items:center}
+  .why-box{background:#FFFEFC;border:3px solid var(--ink);border-radius:230px 18px 220px 16px/16px 220px 18px 230px;padding:22px}
+  .why-box .kicker{font:700 12px var(--hand-en);letter-spacing:.14em;color:#9a7a86}
+  .why-box h3{margin:8px 0 12px;font-size:26px}
+  .why-box ul{margin:0;padding-left:20px;line-height:1.9;font-size:15.5px;color:#5a4650}
+  .arrow{font-size:40px;text-align:center;color:var(--pink-deep)}
+
+  /* iteration stepper */
+  .tabs{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+  .tab{font:700 15px var(--hand-en);border:3px solid var(--ink);border-radius:255px 14px 225px 16px/16px 225px 14px 255px;
+    background:#FFFEFC;padding:10px 20px;cursor:pointer;box-shadow:4px 5px 0 rgba(43,43,43,.15);transition:.15s}
+  .tab:hover{transform:translate(-2px,-2px)} .tab.active{background:var(--pink);box-shadow:6px 7px 0 rgba(43,43,43,.2)}
+  .iter-panel{display:none;animation:fade .4s ease} .iter-panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .iter-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:start}
+  .iter-main h3{margin:0 0 10px;font-size:26px}
+  .iter-main p{line-height:1.9;color:#5a4650;margin:10px 0}
+  .iter-main ul{padding-left:20px;line-height:1.9;color:#5a4650}
+  .iter-main .em{background:linear-gradient(transparent 62%,var(--pink) 62%);font-weight:700}
+  .metric-box{background:var(--pink-soft);border:3px solid var(--ink);border-radius:18px;padding:20px}
+  .metric-box h4{margin:0 0 16px;font:700 16px var(--hand-en)}
+  .bar-row{margin:14px 0}
+  .bar-row .lbl{display:flex;justify-content:space-between;font:14px var(--hand-en);margin-bottom:6px}
+  .bar{height:18px;background:#fff;border:2px solid var(--ink);border-radius:10px;overflow:hidden}
+  .bar > i{display:block;height:100%;background:var(--pink-deep);width:0;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+  .iter-panel.active .bar > i{width:var(--w)}
+  .badcase{margin-top:16px;font:13px var(--hand-cn);color:#8a5a70;line-height:1.7}
+  .chip{display:inline-block;font:700 12px var(--hand-en);border:2px solid var(--ink);border-radius:999px;padding:3px 9px;margin:3px 4px 0 0;background:#fff}
+
+  /* decisions */
+  .decision{position:relative;perspective:1200px;cursor:pointer;min-height:220px}
+  .decision .inner{position:relative;width:100%;height:100%;min-height:220px;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.4,.05,.2,1)}
+  .decision.flipped .inner{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;background:#FFFEFC;border:3px solid var(--ink);
+    border-radius:230px 16px 240px 18px/18px 240px 16px 230px;padding:22px;box-shadow:6px 7px 0 rgba(43,43,43,.13)}
+  .face.back{transform:rotateY(180deg);background:var(--pink-soft)}
+  .face .q{font:700 13px var(--hand-en);letter-spacing:.1em;color:#9a7a86}
+  .face h3{margin:8px 0 14px;font-size:24px}
+  .face .opt{font-size:16px;line-height:1.8;color:#5a4650}
+  .face .opt b{color:var(--ink)}
+  .face .ans{font-size:16px;line-height:1.85;color:#5a4650}
+  .face .ans .pick{display:inline-block;font:700 13px var(--hand-en);background:var(--butter);border:2px solid var(--ink);border-radius:12px;padding:3px 10px;margin-bottom:10px}
+  .flip-cue{font:12px var(--hand-en);color:#a86b86;margin-top:12px}
+
+  /* 成果折线图 */
+  .chart-card{padding:24px 30px 20px}
+  .line-chart{display:block;width:100%;height:auto;overflow:visible}
+  .line-chart .grid{stroke:#E7A9C0;stroke-width:1.5;stroke-dasharray:5 5}
+  .line-chart .axis{stroke:var(--ink);stroke-width:2.5}
+  .line-chart .trend{fill:none;stroke:var(--pink-deep);stroke-width:4;stroke-linejoin:round;stroke-linecap:round;
+    stroke-dasharray:900;stroke-dashoffset:900;animation:draw 1.4s .2s ease forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .line-chart .pt{fill:#FFFEFC;stroke:var(--pink-deep);stroke-width:3.5}
+  .line-chart .vlabel{font:700 17px var(--hand-en);fill:#a33d6b}
+  .line-chart .xtick{font:14px var(--hand-en);fill:#5a4650}
+  .line-chart .ytick{font:12px var(--hand-en);fill:#9a7a86}
+  .chart-note{text-align:center;font:15px var(--hand-cn);color:#7a5866;margin:6px 0 0}
+
+  .footnote{text-align:center;font:13px var(--hand-en);color:#9a7a86;padding:34px 0 60px}
+
+  @media(max-width:820px){
+    .grid2,.iter-grid,.why-flow{grid-template-columns:1fr}
+    .arrow{transform:rotate(90deg)}
+    .hero h1{font-size:40px}
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="3" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="3.5" xChannelSelector="R" yChannelSelector="G"/></filter>
+</svg>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">PROJECT · 小红书 / 全球化翻译</span>
+    <h1>源语言识别模型评测</h1>
+    <p class="lead">让模型回答“这条笔记里有哪些语言、各占多少”，支撑“送哪些语种去翻译、以哪个语种为主”的翻译策略。准确率从 70.8% 提高到 96%，并处理了短文本与中文笔记的线上误翻问题。</p>
+    <div class="tags"><span>语种集合</span><span>语种占比</span><span>短文本降级</span><span>V1→V4</span></div>
+  </header>
+
+  <!-- 01 为什么 -->
+  <section class="block">
+    <div class="sec-head"><span class="sec-num">01</span><h2>为什么要做</h2><span class="hint">旧能力答不了"到底有几种语言"</span></div>
+    <div class="why-flow">
+      <div class="why-box">
+        <div class="kicker">BEFORE · 迭代前</div>
+        <h3>只能判断"混没混"</h3>
+        <ul><li>只输出<b>是否存在混杂</b></li><li>混杂时统一吐出 <code>mix</code></li><li>无法回答：有哪几种语言？各占多少？</li></ul>
+      </div>
+      <div class="arrow">➜</div>
+      <div class="why-box">
+        <div class="kicker">AFTER · 目标</div>
+        <h3>细粒度源语言识别</h3>
+        <ul><li><b>语种集合</b>：文本中全部主要语种</li><li><b>各语种占比</b>：供产品定"占比低于多少不翻"</li><li>支撑主动翻译上线与自动翻译扩语种</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 三次迭代 -->
+  <section class="block">
+    <div class="sec-head"><span class="sec-num">02</span><h2>三次迭代（8月）</h2><span class="hint">点标签切换 · 看准确率怎么爬上来</span></div>
+    <div class="tabs">
+      <button class="tab active" data-iter="v1">V1 · 摸底</button>
+      <button class="tab" data-iter="v2">V2 · 口径调整</button>
+      <button class="tab" data-iter="v3">V3 · 拉丁语系优化</button>
+    </div>
+
+    <div class="iter-panel active" id="v1">
+      <div class="iter-grid">
+        <div class="iter-main card">
+          <h3>第一次：圈数据集 + 摸底</h3>
+          <p>圈选评测数据集，对源语言模型能力做首次系统摸底。</p>
+          <ul>
+            <li>语种合集判断准确率仅 <span class="em">70.8%</span></li>
+            <li><span class="em">40%</span> 样本误检出不存在的小语种</li>
+            <li>误检 TOP3 占总量 80%：</li>
+          </ul>
+          <div><span class="chip">马来语 ×38</span><span class="chip">西班牙语 ×29</span><span class="chip">法语 ×23</span></div>
+          <p>其次是中日混淆：20 条把日语判成中文，推测因中日字符重叠。</p>
+        </div>
+        <div class="metric-box">
+          <h4>本轮关键指标</h4>
+          <div class="bar-row"><div class="lbl"><span>语种合集准确率</span><b>70.8%</b></div><div class="bar"><i style="--w:70.8%"></i></div></div>
+          <div class="bar-row"><div class="lbl"><span>误检样本占比</span><b>40%</b></div><div class="bar"><i style="--w:40%"></i></div></div>
+          <div class="badcase">最大问题：小语种误检 + 中日字符混淆</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="iter-panel" id="v2">
+      <div class="iter-grid">
+        <div class="iter-main card">
+          <h3>第二次：口径 + 标准 + 扩语种</h3>
+          <ul>
+            <li>占比口径从<b>词数</b>改为<b>字符数</b>，更贴合视觉上的混杂感受</li>
+            <li>评测标准定为<b>主导语种 / 语种合集 / 语种占比</b>三维</li>
+            <li>为后续扩语种加入东南亚小语种，共 <b>16 种语言</b></li>
+          </ul>
+          <p>主导语种 97%、合集 80%、占比（5% 误差阈值）70%。最大问题变成相似拉丁语种混淆——英语被误检为马来语、西班牙语、法语等。</p>
+        </div>
+        <div class="metric-box">
+          <h4>本轮关键指标</h4>
+          <div class="bar-row"><div class="lbl"><span>主导语种</span><b>97%</b></div><div class="bar"><i style="--w:97%"></i></div></div>
+          <div class="bar-row"><div class="lbl"><span>语种合集</span><b>80%</b></div><div class="bar"><i style="--w:80%"></i></div></div>
+          <div class="bar-row"><div class="lbl"><span>语种占比</span><b>70%</b></div><div class="bar"><i style="--w:70%"></i></div></div>
+          <div class="badcase">合集准确率提升，但暴露拉丁语系误检</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="iter-panel" id="v3">
+      <div class="iter-grid">
+        <div class="iter-main card">
+          <h3>第三次：优化拉丁语系检测</h3>
+          <p>核心改动：提高英语在检测中的置信度——在<b>不确定的独立短词/短语与 hashtag</b> 中，更倾向判为英语。</p>
+          <p>结果大幅跃升：<span class="em">主导语种 100%</span>、<span class="em">语种合集 96%</span>，达到可用标准。</p>
+          <p>代价可控：少部分法语/马来语短语被判成英语，但两语种相似度确实极高，看 case 属可接受误判。</p>
+        </div>
+        <div class="metric-box">
+          <h4>本轮关键指标</h4>
+          <div class="bar-row"><div class="lbl"><span>主导语种</span><b>100%</b></div><div class="bar"><i style="--w:100%"></i></div></div>
+          <div class="bar-row"><div class="lbl"><span>语种合集</span><b>96%</b></div><div class="bar"><i style="--w:96%"></i></div></div>
+          <div class="badcase">合集 70.8% → 96% ✅ 可接受的 trade-off</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 两个决策 -->
+  <section class="block">
+    <div class="sec-head"><span class="sec-num">03</span><h2>两个关键决策</h2><span class="hint">点卡片翻面看结论与理由</span></div>
+    <div class="grid2">
+      <div class="decision" data-d="1">
+        <div class="inner">
+          <div class="face">
+            <div class="q">DECISION 01 · 短文本降级</div>
+            <h3>短文本用哪个结果？</h3>
+            <div class="opt">A · 原生 detect：线上旧模型直接判断<br><br>B · 单语种：取新模型语种列表里占比最大的那个</div>
+            <div class="flip-cue">↻ 点击翻面看决策</div>
+          </div>
+          <div class="face back">
+            <div class="q">DECISION 01 · 结论</div>
+            <h3><span class="pick">选 B · 单语种</span></h3>
+            <div class="ans">新模型对小语种判断能力明显更强，旧模型小语种错误率高。旧逻辑唯一优势是"中文/日文字符权重高"的消歧，但不足以抵消整体差距。</div>
+          </div>
+        </div>
+      </div>
+      <div class="decision" data-d="2">
+        <div class="inner">
+          <div class="face">
+            <div class="q">DECISION 02 · 阈值</div>
+            <h3>短文本降级阈值定多少？</h3>
+            <div class="opt">50 字符：覆盖 40% 笔记 / 80% 评论<br><br>75 字符：覆盖 70% 笔记 / 90% 评论</div>
+            <div class="flip-cue">↻ 点击翻面看决策</div>
+          </div>
+          <div class="face back">
+            <div class="q">DECISION 02 · 结论</div>
+            <h3><span class="pick">选 50</span></h3>
+            <div class="ans">50 已能筛掉大部分"不应识别为含小语种"的噪声，减少中译中；75 保护更多但降级影响太大（70% 笔记 / 90% 评论被降级）。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 线上问题 -->
+  <section class="block">
+    <div class="sec-head"><span class="sec-num">04</span><h2>两次线上问题治理</h2><span class="hint">从客诉到修复</span></div>
+    <div class="grid2">
+      <div class="card">
+        <h3 style="margin-top:0">短文本误翻（9.10–9.11）</h3>
+        <p><b>现象：</b>中文笔记/评论大量出现翻译按钮，引发客诉。如"我拿到了 offer"因英文超 5% 被判中英混杂。</p>
+        <p><b>原因：</b>① 按"某语种占比 &gt;5% 即送翻"；② 中译中用了未训练的开源模型，幻觉输出英文。</p>
+        <p><b>解法：</b>SDK 临时回滚止损 → 重调中文 prompt（原样输出），15000 条验证正常率 <b>50%→99.99%</b> → V4 短文本降级（&lt;50 字符只输出主导语言）。</p>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">中文笔记降级（9.14–9.15）</h3>
+        <p><b>现象：</b>带英文话题（#iPhone #MacBook #UI #pku）的中文笔记被判中英混合，对中文用户露出翻译按钮。</p>
+        <p><b>原因：</b>英文 tag 多为品牌专名/缩写，虽符合"&gt;50 字符且英文 &gt;5%"规则，但产品判断不该出按钮，且量级大、逐个修不完。</p>
+        <p><b>解法：</b>生产侧先用 V1 判中文→翻英语+小语种，非中文再走 V2；消费侧读取时先读 V1、再读 V2。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 成果 -->
+  <section class="block">
+    <div class="sec-head"><span class="sec-num">05</span><h2>成果</h2><span class="hint">语种合集准确率 · 三次迭代</span></div>
+    <div class="card chart-card">
+      <svg class="line-chart" viewBox="0 0 760 300" role="img" aria-label="语种合集准确率从70.8%提升到96%">
+        <!-- 网格 -->
+        <line x1="70" y1="40" x2="70" y2="240" class="axis"/>
+        <line x1="70" y1="240" x2="720" y2="240" class="axis"/>
+        <line x1="70" y1="190" x2="720" y2="190" class="grid"/>
+        <line x1="70" y1="140" x2="720" y2="140" class="grid"/>
+        <line x1="70" y1="90" x2="720" y2="90" class="grid"/>
+        <line x1="70" y1="40" x2="720" y2="40" class="grid"/>
+        <text x="58" y="244" class="ytick" text-anchor="end">60</text>
+        <text x="58" y="194" class="ytick" text-anchor="end">70</text>
+        <text x="58" y="144" class="ytick" text-anchor="end">80</text>
+        <text x="58" y="94" class="ytick" text-anchor="end">90</text>
+        <text x="58" y="44" class="ytick" text-anchor="end">100</text>
+        <!-- 折线: 70.8->190-2.16*10.8=166.6 ; 80->140 ; 96->90-2.16*6=77 -->
+        <polyline class="trend" points="160,166.6 400,140 640,77"/>
+        <circle class="pt" cx="160" cy="166.6" r="7"/>
+        <circle class="pt" cx="400" cy="140" r="7"/>
+        <circle class="pt" cx="640" cy="77" r="7"/>
+        <text x="160" y="152" class="vlabel" text-anchor="middle">70.8%</text>
+        <text x="400" y="126" class="vlabel" text-anchor="middle">80%</text>
+        <text x="640" y="63" class="vlabel" text-anchor="middle">96%</text>
+        <text x="160" y="266" class="xtick" text-anchor="middle">V1 · 摸底</text>
+        <text x="400" y="266" class="xtick" text-anchor="middle">V2 · 口径调整</text>
+        <text x="640" y="266" class="xtick" text-anchor="middle">V3 · 拉丁优化</text>
+      </svg>
+      <p class="chart-note">从摸底 70.8% 提升到 96%，达到可用标准 ✦</p>
+    </div>
+  </section>
+
+  <div class="footnote">✦ Interactive demo · 供确认展示形式，确认后嵌入个人网页 ✦</div>
+</div>
+
+<script>
+  // 迭代 tabs
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active')});
+      document.querySelectorAll('.iter-panel').forEach(function(p){p.classList.remove('active')});
+      t.classList.add('active');
+      document.getElementById(t.getAttribute('data-iter')).classList.add('active');
+    });
+  });
+  // 决策翻牌
+  document.querySelectorAll('.decision').forEach(function(d){
+    d.addEventListener('click',function(){ d.classList.toggle('flipped'); });
+  });
+</script>
+</body>
+</html>
