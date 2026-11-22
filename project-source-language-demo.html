@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>源语言识别模型评测 · Interactive Demo</title>
+<title>源语言识别模型评测 · 项目介绍</title>
 <style>
   :root{
     --paper:#FFF7F2; --pink:#F7C9D9; --pink-soft:#FCE3EC; --pink-deep:#EA9FBB;
@@ -21,11 +21,15 @@
   .grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.18;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}
   .wrap{width:min(1080px,calc(100% - 40px));margin:auto;position:relative;z-index:2}
+  .back-btn{position:fixed;left:22px;top:20px;z-index:80;font:700 15px var(--hand-cn);color:var(--ink);
+    background:#FFFEFC;border:3px solid var(--ink);border-radius:255px 14px 225px 16px/16px 225px 14px 255px;
+    padding:8px 16px;cursor:pointer;box-shadow:5px 6px 0 rgba(43,43,43,.16);text-decoration:none;transition:.16s}
+  .back-btn:hover{transform:translate(-2px,-2px);box-shadow:8px 9px 0 rgba(43,43,43,.2);background:var(--pink-soft)}
+  .back-btn:active{transform:translate(2px,2px);box-shadow:2px 3px 0 rgba(43,43,43,.18)}
   h1,h2,h3{font-family:var(--hand-en)}
   .eyebrow{display:inline-block;font:700 12px var(--hand-en);letter-spacing:.16em;border:2px solid var(--ink);
     border-radius:14px 9px 16px 10px;padding:4px 12px;background:rgba(255,255,255,.8);transform:rotate(-2deg)}
 
-  /* hero */
   .hero{padding:70px 0 40px;text-align:center}
   .hero h1{font-size:clamp(40px,6vw,72px);line-height:1;margin:20px 0 12px;letter-spacing:-.03em}
   .hero .lead{max-width:760px;margin:20px auto 0;font-size:18px;line-height:1.9;color:#5a4650}
@@ -33,7 +37,6 @@
   .hero .tags span{font:700 12px var(--hand-en);border:2px solid var(--ink);border-radius:999px;padding:6px 12px;transform:rotate(-1deg)}
   .hero .tags span:nth-child(2){transform:rotate(2deg)} .hero .tags span:nth-child(3){transform:rotate(-2deg)}
 
-  /* section */
   section.block{padding:56px 0;border-top:2px dashed rgba(43,43,43,.25)}
   .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:28px;flex-wrap:wrap}
   .sec-num{font:900 54px var(--hand-en);color:var(--pink-deep);line-height:.7}
@@ -44,7 +47,6 @@
     box-shadow:7px 8px 0 rgba(43,43,43,.13);padding:24px 28px}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
 
-  /* why */
   .why-flow{display:grid;grid-template-columns:1fr 60px 1fr;gap:14px;align-items:center}
   .why-box{background:#FFFEFC;border:3px solid var(--ink);border-radius:230px 18px 220px 16px/16px 220px 18px 230px;padding:22px}
   .why-box .kicker{font:700 12px var(--hand-en);letter-spacing:.14em;color:#9a7a86}
@@ -52,7 +54,6 @@
   .why-box ul{margin:0;padding-left:20px;line-height:1.9;font-size:15.5px;color:#5a4650}
   .arrow{font-size:40px;text-align:center;color:var(--pink-deep)}
 
-  /* iteration stepper */
   .tabs{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px}
   .tab{font:700 15px var(--hand-en);border:3px solid var(--ink);border-radius:255px 14px 225px 16px/16px 225px 14px 255px;
     background:#FFFEFC;padding:10px 20px;cursor:pointer;box-shadow:4px 5px 0 rgba(43,43,43,.15);transition:.15s}
@@ -74,22 +75,6 @@
   .badcase{margin-top:16px;font:13px var(--hand-cn);color:#8a5a70;line-height:1.7}
   .chip{display:inline-block;font:700 12px var(--hand-en);border:2px solid var(--ink);border-radius:999px;padding:3px 9px;margin:3px 4px 0 0;background:#fff}
 
-  /* decisions */
-  .decision{position:relative;perspective:1200px;cursor:pointer;min-height:220px}
-  .decision .inner{position:relative;width:100%;height:100%;min-height:220px;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.4,.05,.2,1)}
-  .decision.flipped .inner{transform:rotateY(180deg)}
-  .face{position:absolute;inset:0;backface-visibility:hidden;background:#FFFEFC;border:3px solid var(--ink);
-    border-radius:230px 16px 240px 18px/18px 240px 16px 230px;padding:22px;box-shadow:6px 7px 0 rgba(43,43,43,.13)}
-  .face.back{transform:rotateY(180deg);background:var(--pink-soft)}
-  .face .q{font:700 13px var(--hand-en);letter-spacing:.1em;color:#9a7a86}
-  .face h3{margin:8px 0 14px;font-size:24px}
-  .face .opt{font-size:16px;line-height:1.8;color:#5a4650}
-  .face .opt b{color:var(--ink)}
-  .face .ans{font-size:16px;line-height:1.85;color:#5a4650}
-  .face .ans .pick{display:inline-block;font:700 13px var(--hand-en);background:var(--butter);border:2px solid var(--ink);border-radius:12px;padding:3px 10px;margin-bottom:10px}
-  .flip-cue{font:12px var(--hand-en);color:#a86b86;margin-top:12px}
-
-  /* 成果折线图 */
   .chart-card{padding:24px 30px 20px}
   .line-chart{display:block;width:100%;height:auto;overflow:visible}
   .line-chart .grid{stroke:#E7A9C0;stroke-width:1.5;stroke-dasharray:5 5}
@@ -103,12 +88,54 @@
   .line-chart .ytick{font:12px var(--hand-en);fill:#9a7a86}
   .chart-note{text-align:center;font:15px var(--hand-cn);color:#7a5866;margin:6px 0 0}
 
+  /* 回滚模块 */
+  .rollback-block{margin-bottom:34px}
+  .rollback-block h3{font-size:26px;margin:0 0 12px;display:flex;align-items:center;gap:10px}
+  .rollback-block h3 .date{font:700 13px var(--hand-en);color:#9a7a86}
+  .rollback-block .card p{margin:8px 0;line-height:1.9;font-size:15.5px;color:#5a4650}
+  .rollback-block .card b{color:var(--ink)}
+  .note{background:var(--pink-soft);border-left:4px solid var(--pink-deep);padding:10px 14px;margin-top:12px !important;
+    font-size:14px !important;line-height:1.8 !important}
+  .sub-label{font:700 14px var(--hand-en);letter-spacing:.08em;color:#8a5a70;margin:18px 0 12px}
+
+  .decision{position:relative;perspective:1200px;cursor:pointer;min-height:210px}
+  .decision .inner{position:relative;width:100%;height:100%;min-height:210px;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.4,.05,.2,1)}
+  .decision.flipped .inner{transform:rotateY(180deg)}
+  .face{position:absolute;inset:0;backface-visibility:hidden;background:#FFFEFC;border:3px solid var(--ink);
+    border-radius:230px 16px 240px 18px/18px 240px 16px 230px;padding:20px;box-shadow:6px 7px 0 rgba(43,43,43,.13);overflow:hidden}
+  .face.back{transform:rotateY(180deg);background:var(--pink-soft)}
+  .face .q{font:700 12px var(--hand-en);letter-spacing:.1em;color:#9a7a86}
+  .face h3{margin:6px 0 10px;font-size:21px}
+  .face .opt{font-size:14.5px;line-height:1.75;color:#5a4650}
+  .face .ans{font-size:14px;line-height:1.75;color:#5a4650}
+  .face .ans .pick{display:inline-block;font:700 12px var(--hand-en);background:var(--butter);border:2px solid var(--ink);border-radius:12px;padding:3px 9px;margin-bottom:8px}
+  .flip-cue{font:11px var(--hand-en);color:#a86b86;margin-top:10px}
+  .callout{background:#FFF0F4;border:2.5px dashed var(--pink-deep);border-radius:16px;padding:16px 20px;
+    font-size:15px;line-height:1.85;color:#6b4152;margin-top:8px}
+
+  /* 后续迭代 */
+  .table-scroll{overflow-x:auto;margin:14px 0;-webkit-overflow-scrolling:touch}
+  .crayon-table{width:100%;border-collapse:collapse;font-size:13.5px;line-height:1.65}
+  .crayon-table th,.crayon-table td{border:1px solid #E3C9D4;padding:9px 11px;text-align:left;vertical-align:top}
+  .crayon-table thead th{background:var(--pink-soft);font-family:var(--hand-en);font-size:12.5px;font-weight:700;
+    color:#6b4152;border-bottom:1.5px solid var(--pink-deep)}
+  .crayon-table tbody tr{border-bottom:1px solid #EEDCE4}
+  .crayon-table tbody tr:last-child td{border-bottom:none}
+  .crayon-table td:first-child{font-weight:700;color:#4a3540}
+  .prio{display:inline-block;font:700 10px var(--hand-en);border-radius:6px;padding:2px 7px}
+  .prio.p0{background:#FCE9AE;color:#7a5a1e} .prio.p1{background:#F6DCE7;color:#8a4a68}
+  .prio:not(.p0):not(.p1){background:#EFEAF2;color:#6a5a72}
+  .sub-title{font-family:var(--hand-en);font-size:20px;margin:24px 0 10px}
+  .stack-list{margin:10px 0 0 0;padding-left:22px;line-height:1.9;font-size:15px;color:#5a4650}
+  .stack-list li{margin:5px 0}
   .footnote{text-align:center;font:13px var(--hand-en);color:#9a7a86;padding:34px 0 60px}
 
   @media(max-width:820px){
     .grid2,.iter-grid,.why-flow{grid-template-columns:1fr}
     .arrow{transform:rotate(90deg)}
     .hero h1{font-size:40px}
+    .crayon-table{font-size:12px;min-width:660px}
+    .crayon-table th,.crayon-table td{padding:6px}
   }
 </style>
 </head>
@@ -118,6 +145,7 @@
     <feDisplacementMap in="SourceGraphic" in2="n" scale="3.5" xChannelSelector="R" yChannelSelector="G"/></filter>
 </svg>
 <div class="grain" aria-hidden="true"></div>
+<a class="back-btn" href="./index.html#projects">← 返回项目列表</a>
 
 <div class="wrap">
   <header class="hero">
@@ -127,9 +155,9 @@
     <div class="tags"><span>语种集合</span><span>语种占比</span><span>短文本降级</span><span>V1→V4</span></div>
   </header>
 
-  <!-- 01 为什么 -->
+  <!-- 01 项目背景 -->
   <section class="block">
-    <div class="sec-head"><span class="sec-num">01</span><h2>为什么要做</h2><span class="hint">旧能力答不了"到底有几种语言"</span></div>
+    <div class="sec-head"><span class="sec-num">01</span><h2>项目背景</h2><span class="hint">旧能力答不了"到底有几种语言"</span></div>
     <div class="why-flow">
       <div class="why-box">
         <div class="kicker">BEFORE · 迭代前</div>
@@ -145,7 +173,7 @@
     </div>
   </section>
 
-  <!-- 02 三次迭代 -->
+  <!-- 02 三次迭代（8月） -->
   <section class="block">
     <div class="sec-head"><span class="sec-num">02</span><h2>三次迭代（8月）</h2><span class="hint">点标签切换 · 看准确率怎么爬上来</span></div>
     <div class="tabs">
@@ -215,68 +243,11 @@
     </div>
   </section>
 
-  <!-- 03 两个决策 -->
+  <!-- 03 项目成果 -->
   <section class="block">
-    <div class="sec-head"><span class="sec-num">03</span><h2>两个关键决策</h2><span class="hint">点卡片翻面看结论与理由</span></div>
-    <div class="grid2">
-      <div class="decision" data-d="1">
-        <div class="inner">
-          <div class="face">
-            <div class="q">DECISION 01 · 短文本降级</div>
-            <h3>短文本用哪个结果？</h3>
-            <div class="opt">A · 原生 detect：线上旧模型直接判断<br><br>B · 单语种：取新模型语种列表里占比最大的那个</div>
-            <div class="flip-cue">↻ 点击翻面看决策</div>
-          </div>
-          <div class="face back">
-            <div class="q">DECISION 01 · 结论</div>
-            <h3><span class="pick">选 B · 单语种</span></h3>
-            <div class="ans">新模型对小语种判断能力明显更强，旧模型小语种错误率高。旧逻辑唯一优势是"中文/日文字符权重高"的消歧，但不足以抵消整体差距。</div>
-          </div>
-        </div>
-      </div>
-      <div class="decision" data-d="2">
-        <div class="inner">
-          <div class="face">
-            <div class="q">DECISION 02 · 阈值</div>
-            <h3>短文本降级阈值定多少？</h3>
-            <div class="opt">50 字符：覆盖 40% 笔记 / 80% 评论<br><br>75 字符：覆盖 70% 笔记 / 90% 评论</div>
-            <div class="flip-cue">↻ 点击翻面看决策</div>
-          </div>
-          <div class="face back">
-            <div class="q">DECISION 02 · 结论</div>
-            <h3><span class="pick">选 50</span></h3>
-            <div class="ans">50 已能筛掉大部分"不应识别为含小语种"的噪声，减少中译中；75 保护更多但降级影响太大（70% 笔记 / 90% 评论被降级）。</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 04 线上问题 -->
-  <section class="block">
-    <div class="sec-head"><span class="sec-num">04</span><h2>两次线上问题治理</h2><span class="hint">从客诉到修复</span></div>
-    <div class="grid2">
-      <div class="card">
-        <h3 style="margin-top:0">短文本误翻（9.10–9.11）</h3>
-        <p><b>现象：</b>中文笔记/评论大量出现翻译按钮，引发客诉。如"我拿到了 offer"因英文超 5% 被判中英混杂。</p>
-        <p><b>原因：</b>① 按"某语种占比 &gt;5% 即送翻"；② 中译中用了未训练的开源模型，幻觉输出英文。</p>
-        <p><b>解法：</b>SDK 临时回滚止损 → 重调中文 prompt（原样输出），15000 条验证正常率 <b>50%→99.99%</b> → V4 短文本降级（&lt;50 字符只输出主导语言）。</p>
-      </div>
-      <div class="card">
-        <h3 style="margin-top:0">中文笔记降级（9.14–9.15）</h3>
-        <p><b>现象：</b>带英文话题（#iPhone #MacBook #UI #pku）的中文笔记被判中英混合，对中文用户露出翻译按钮。</p>
-        <p><b>原因：</b>英文 tag 多为品牌专名/缩写，虽符合"&gt;50 字符且英文 &gt;5%"规则，但产品判断不该出按钮，且量级大、逐个修不完。</p>
-        <p><b>解法：</b>生产侧先用 V1 判中文→翻英语+小语种，非中文再走 V2；消费侧读取时先读 V1、再读 V2。</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 05 成果 -->
-  <section class="block">
-    <div class="sec-head"><span class="sec-num">05</span><h2>成果</h2><span class="hint">语种合集准确率 · 三次迭代</span></div>
+    <div class="sec-head"><span class="sec-num">03</span><h2>项目成果</h2><span class="hint">语种合集准确率 · 三次迭代</span></div>
     <div class="card chart-card">
       <svg class="line-chart" viewBox="0 0 760 300" role="img" aria-label="语种合集准确率从70.8%提升到96%">
-        <!-- 网格 -->
         <line x1="70" y1="40" x2="70" y2="240" class="axis"/>
         <line x1="70" y1="240" x2="720" y2="240" class="axis"/>
         <line x1="70" y1="190" x2="720" y2="190" class="grid"/>
@@ -288,7 +259,6 @@
         <text x="58" y="144" class="ytick" text-anchor="end">80</text>
         <text x="58" y="94" class="ytick" text-anchor="end">90</text>
         <text x="58" y="44" class="ytick" text-anchor="end">100</text>
-        <!-- 折线: 70.8->190-2.16*10.8=166.6 ; 80->140 ; 96->90-2.16*6=77 -->
         <polyline class="trend" points="160,166.6 400,140 640,77"/>
         <circle class="pt" cx="160" cy="166.6" r="7"/>
         <circle class="pt" cx="400" cy="140" r="7"/>
@@ -304,11 +274,113 @@
     </div>
   </section>
 
-  <div class="footnote">✦ Interactive demo · 供确认展示形式，确认后嵌入个人网页 ✦</div>
+  <!-- 04 两次回滚（9月） -->
+  <section class="block">
+    <div class="sec-head"><span class="sec-num">04</span><h2>两次回滚（9月）</h2><span class="hint">保护中文用户体验，暂时牺牲小语种体验</span></div>
+
+    <!-- 4.1 短文本降级 -->
+    <div class="rollback-block">
+      <h3>短文本降级 <span class="date">9.9 – 9.10</span></h3>
+      <div class="card">
+        <p><b>问题：</b>短标题、评论的上下文极少。仅凭字符占比，offer、intake、mac、Hip、Airplane 等少量拉丁文本就容易超过 5% 阈值，被判为中英或中小语种混杂；若直接送翻，中文用户会看到不应出现的翻译按钮。</p>
+        <p><b>解法：</b>SDK 临时回滚止损 → 重调中文 prompt（原样输出），15000 条验证正常率 <b>50%→99.99%</b>；V4 引入短文本降级：<b>对字符数&lt;阈值的文本，直接降级为单语种结果（取新模型语种列表里占比最大的那一个），不再输出多语种列表</b>。</p>
+        <div class="note"><b>方案收益：</b>压制短文本中因少量外语 token 导致的误出翻译按钮。<b>实际代价：</b>短文本里的真实双语表达、小语种正文也被压缩为单语种。50 字符阈值约覆盖 45% 笔记、90% 评论。</div>
+      </div>
+      <p class="sub-label">两个关键决策 · 点卡片翻面看结论与理由</p>
+      <div class="grid2">
+        <div class="decision" data-d="1">
+          <div class="inner">
+            <div class="face">
+              <div class="q">DECISION 01 · 短文本降级</div>
+              <h3>短文本用哪个结果？</h3>
+              <div class="opt">A · 原生 detect：线上旧模型直接判断<br><br>B · 单语种：取新模型语种列表里占比最大的那个</div>
+              <div class="flip-cue">↻ 点击翻面看决策</div>
+            </div>
+            <div class="face back">
+              <div class="q">DECISION 01 · 结论</div>
+              <h3><span class="pick">选 B · 单语种</span></h3>
+              <div class="ans">新模型对小语种判断能力明显更强，旧模型小语种错误率高。旧逻辑唯一优势是"中文/日文字符权重高"的消歧，但不足以抵消整体差距。</div>
+            </div>
+          </div>
+        </div>
+        <div class="decision" data-d="2">
+          <div class="inner">
+            <div class="face">
+              <div class="q">DECISION 02 · 阈值</div>
+              <h3>短文本降级阈值定多少？</h3>
+              <div class="opt">50 字符：覆盖 40% 笔记 / 80% 评论<br><br>75 字符：覆盖 70% 笔记 / 90% 评论</div>
+              <div class="flip-cue">↻ 点击翻面看决策</div>
+            </div>
+            <div class="face back">
+              <div class="q">DECISION 02 · 结论</div>
+              <h3><span class="pick">选 50</span></h3>
+              <div class="ans">50 已能筛掉大部分"不应识别为含小语种"的噪声，减少中译中；75 保护更多但降级影响太大（70% 笔记 / 90% 评论被降级）。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4.2 中文笔记降级 -->
+    <div class="rollback-block">
+      <h3>中文笔记降级 <span class="date">9.14 – 9.15</span></h3>
+      <div class="card">
+        <p><b>问题：</b>短文本保护后，长中文笔记仍会因 #iPhone、#MacBook、#UI、#pku、#Apple 等英文 tag 被判为中英混合。</p>
+        <p><b>解法：</b>旧模型为 V1，新模型为 V2；当前生产与消费链路先由 V1 判断是否为中文——判为中文则翻译为英语和小语种，非中文再使用 V2 判定语言合集，输出多语种结果。</p>
+        <div class="note"><b>方案收益：</b>减少中文笔记因英文 tag 出现翻译按钮。<b>实际代价：</b>中文内容中的真实外语正文、可翻译外文 tag 一并被降级。<b>说明：</b>本质上是在翻译入口处回避模型判断，不是在判断层消除"外语是否应翻"的歧义。</div>
+      </div>
+    </div>
+
+    <p class="callout">💡 产品侧判断，这种降级和回滚只能是暂时的策略：为了保护中文用户体验，牺牲了小语种用户体验。后续还需要源语言模型针对「短文本」「话题标签」「源语言中文」这三种情况继续优化。</p>
+  </section>
+
+  <!-- 05 后续迭代：语义识别能力（10月） -->
+  <section class="block">
+    <div class="sec-head"><span class="sec-num">05</span><h2>后续迭代：语义识别能力（10月）</h2><span class="hint">从"语言判断"走向"语义判断"</span></div>
+
+    <div class="card">
+      <h3 style="margin-top:0">当前问题</h3>
+      <p style="line-height:1.9;color:#5a4650">产品侧对线上大盘笔记语言混杂的实际类型做了初步摸底，发现约七成的多语言混杂包含<b>"不应翻译的内容"</b>，这些内容需要通过「语义判断」来过滤。</p>
+      <div class="table-scroll"><table class="crayon-table">
+        <thead><tr><th>混杂类型</th><th>优先级</th><th>数量（多语言/大盘）</th><th>占比（279条）</th><th>对中文用户的影响</th><th>对英语/小语种用户的影响</th></tr></thead>
+        <tbody>
+          <tr><td>hashtag</td><td><span class="prio p0">P0</span></td><td>79（33/46）</td><td>28.3%</td><td>中文笔记出现翻译按钮</td><td>大部分 tag 为中文，用户看不懂</td></tr>
+          <tr><td>品牌专名 / 人名拼写 / 网络用语</td><td><span class="prio p1">P1</span></td><td>134（70/64）</td><td>48.0%</td><td>中文笔记出现翻译按钮</td><td>专名被翻译后不知所云、搜不到</td></tr>
+          <tr><td>地址</td><td><span class="prio p1">P1</span></td><td>36（26/10）</td><td>12.9%</td><td>海外本地地址被翻成目标语言后失去导航意义</td><td>同左</td></tr>
+          <tr><td>其他（颜文字 / 装饰符）</td><td><span class="prio">P2</span></td><td>14（14/0）</td><td>5.0%</td><td>颜文字被识别成俄语等语种，误出翻译</td><td>同左</td></tr>
+          <tr><td>语言学习</td><td><span class="prio">P2</span></td><td>11（10/1）</td><td>3.9%</td><td>教学对照内容被翻译后失去学习价值</td><td>同左</td></tr>
+          <tr><td>多语种 / 双语表达</td><td><span class="prio">P2</span></td><td>5（5/0）</td><td>1.8%</td><td>中文笔记降级后出现真实外语段落不翻译</td><td>被降级后无法完整消费，翻译能力缩水</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note">备注：hashtag 的使用非常普遍，279 条里有 146 条（52.3%）带外文 hashtag；上表的归类指的是外文基本都在 hashtag 里、正文中外文字符不超过 5 个，主要是由 hashtag 带来多语言混杂的问题。<br>数据来源：多语言圈选人工校验标准答案（239 条）+ 大盘圈选（258 条），共 497 条；其中标准答案含 2 个及以上语种的 279 条为本次分析对象。</div>
+    </div>
+
+    <div class="card" style="margin-top:22px">
+      <h3 class="sub-title">后续 to do</h3>
+      <div class="table-scroll"><table class="crayon-table">
+        <thead><tr><th>问题类型</th><th>to do 清单</th><th>负责方</th><th>优先级</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>hashtag</td>
+            <td>1. hashtag 独立判断源语言<br>2. hashtag 对中文用户不翻译<br>3. 对外国用户需要翻译非目标语言 tag</td>
+            <td>翻译工程给出方案排期</td>
+            <td><span class="prio p0">P0</span></td>
+          </tr>
+          <tr>
+            <td>其他混杂类型</td>
+            <td>1. 算法侧：调研模型语义识别接入能力<br>&nbsp;&nbsp;a. 本期可以先解决「地址、品牌/专名/人名」这两类<br>&nbsp;&nbsp;b. 是否引入新的语义判断模型？还是继续优化源语言识别模型？需要算法侧先给出结论<br>&nbsp;&nbsp;c. 确定方案后，补齐模型能力<br>2. 为模型能力提升，需要构建「是否需要翻译」测评集，供模型训练和效果评测<br>&nbsp;&nbsp;i. 产品侧针对「是否需要翻译」给出初步的判断细则<br>&nbsp;&nbsp;ii. 目前产品侧从大盘笔记中按照一定比例重新抽取了 300 条真实笔记数据，后续将对这 300 条数据分别标注「哪些内容不需要翻译」，供模型学习；更多训练数据待评估标注人力支持</td>
+            <td>算法先调研，确定方案<br>产品支持构建评测集、判断细则<br>可能需要评估标注人力</td>
+            <td><span class="prio p1">P1</span></td>
+          </tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <div class="footnote">✦ 源语言识别模型评测 · 项目沉淀 ✦</div>
 </div>
 
 <script>
-  // 迭代 tabs
   document.querySelectorAll('.tab').forEach(function(t){
     t.addEventListener('click',function(){
       document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active')});
@@ -317,7 +389,6 @@
       document.getElementById(t.getAttribute('data-iter')).classList.add('active');
     });
   });
-  // 决策翻牌
   document.querySelectorAll('.decision').forEach(function(d){
     d.addEventListener('click',function(){ d.classList.toggle('flipped'); });
   });

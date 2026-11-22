@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI-dubbing 评估标注流程 · 项目介绍</title>
+<style>
+  :root{
+    --paper:#FFF7F2; --pink:#F7C9D9; --pink-soft:#FCE3EC; --pink-deep:#EA9FBB;
+    --ink:#2B2B2B; --butter:#F6D77A;
+    --hand-cn:"Xingkai SC","STXingkai","Kaiti SC","STKaiti","KaiTi",cursive;
+    --hand-en:"Comic Sans MS","Chalkboard SE","Marker Felt","Segoe Print",cursive;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;color:var(--ink);font-family:var(--hand-cn);background:var(--paper);overflow-x:hidden;
+    background-image:
+      radial-gradient(ellipse 55% 20% at 2% 1%,rgba(247,201,217,.5),transparent 70%),
+      radial-gradient(ellipse 40% 14% at 99% 3%,rgba(247,201,217,.36),transparent 72%),
+      radial-gradient(ellipse 60% 12% at 50% 99%,rgba(247,201,217,.4),transparent 72%)}
+  .grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.18;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}
+  .wrap{width:min(1320px,calc(100% - 40px));margin:auto;position:relative;z-index:2}
+  .back-btn{position:fixed;left:22px;top:20px;z-index:80;font:700 15px var(--hand-cn);color:var(--ink);
+    background:#FFFEFC;border:3px solid var(--ink);border-radius:255px 14px 225px 16px/16px 225px 14px 255px;
+    padding:8px 16px;cursor:pointer;box-shadow:5px 6px 0 rgba(43,43,43,.16);text-decoration:none;transition:.16s}
+  .back-btn:hover{transform:translate(-2px,-2px);box-shadow:8px 9px 0 rgba(43,43,43,.2);background:var(--pink-soft)}
+  .back-btn:active{transform:translate(2px,2px);box-shadow:2px 3px 0 rgba(43,43,43,.18)}
+  h1,h2{font-family:var(--hand-en)}
+
+  .hero{padding:62px 0 24px;text-align:center}
+  .eyebrow{display:inline-block;font:700 12px var(--hand-en);letter-spacing:.16em;border:2px solid var(--ink);
+    border-radius:14px 9px 16px 10px;padding:4px 12px;background:rgba(255,255,255,.8);transform:rotate(-2deg)}
+  .hero h1{font-size:clamp(36px,5.2vw,62px);line-height:1.05;margin:16px 0 10px;letter-spacing:-.02em}
+  .hero .lead{max-width:840px;margin:12px auto 0;font-size:16px;line-height:1.8;color:#7a5866}
+  .hero .hint{display:inline-block;margin-top:16px;font:13px var(--hand-en);background:var(--butter);
+    border:2px solid var(--ink);border-radius:20px;padding:6px 14px;transform:rotate(1deg)}
+
+  .toolbar{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:0 0 12px;flex-wrap:wrap}
+  .zoom-btn{font:700 13px var(--hand-en);border:2.5px solid var(--ink);border-radius:14px 9px 15px 10px;
+    background:#FFFEFC;padding:6px 12px;cursor:pointer;box-shadow:3px 4px 0 rgba(43,43,43,.14)}
+  .zoom-btn:hover{background:var(--pink-soft)}
+  .zoom-lbl{font:13px var(--hand-en);color:#9a7a86}
+
+  .chart-shell{background:#FFFEFC;border:3px solid var(--ink);border-radius:245px 18px 255px 16px/18px 245px 16px 255px;
+    box-shadow:9px 11px 0 rgba(43,43,43,.12);padding:22px 24px 26px;overflow:hidden}
+  .chart-scroll{overflow:auto;height:70vh;min-height:420px;border:2px dashed rgba(43,43,43,.22);border-radius:12px;
+    background:#FFFCFA;padding:16px}
+  #zoomLayer{transform-origin:top left}
+  .mermaid{font-family:var(--hand-cn)}
+  .mermaid svg{max-width:none!important}
+  .status{font:14px var(--hand-cn);color:#9a7a86;text-align:center;padding:40px 10px}
+  .status.err{color:#c0396b}
+
+  /* 配音前后对比 */
+  .compare{margin-top:54px}
+  .compare-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+  .compare-head h2{font-size:clamp(26px,4vw,40px);margin:0}
+  .compare-head .hint{font:14px var(--hand-cn);color:#9a7a86}
+  .sync-btn{font:700 13px var(--hand-en);border:2.5px solid var(--ink);border-radius:255px 14px 225px 16px/16px 225px 14px 255px;
+    background:var(--butter);padding:7px 15px;cursor:pointer;box-shadow:4px 5px 0 rgba(43,43,43,.16);margin-left:auto}
+  .sync-btn:hover{background:var(--pink-soft)}
+  .video-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .video-box{background:#FFFEFC;border:3px solid var(--ink);border-radius:230px 16px 240px 18px/18px 240px 16px 230px;
+    box-shadow:8px 9px 0 rgba(43,43,43,.13);padding:16px 16px 18px}
+  .video-box.after{border-color:#C0396B;box-shadow:8px 9px 0 rgba(192,57,107,.16)}
+  .video-label{font:700 17px var(--hand-cn);display:flex;align-items:center;gap:8px;margin:2px 0 12px}
+  .video-label .pill{font:700 11px var(--hand-en);border:2px solid var(--ink);border-radius:999px;padding:2px 9px;background:var(--pink-soft)}
+  .video-box.after .video-label .pill{background:#F7C9D9}
+  .video-box video{display:block;max-height:340px;max-width:100%;width:auto;height:auto;margin:0 auto;
+    border-radius:10px;border:2px solid var(--ink);background:#000}
+  .video-note{font:13px var(--hand-cn);color:#8a6a76;margin-top:10px;line-height:1.7}
+
+  .footnote{text-align:center;font:13px var(--hand-en);color:#9a7a86;padding:22px 0 40px}
+
+  @media(max-width:900px){
+    .video-grid{grid-template-columns:1fr}
+    .sync-btn{margin-left:0}
+    .wrap{width:calc(100% - 32px)}
+    .hero h1{font-size:32px;word-break:break-word}
+    .hero .lead{font-size:14px}
+    .chart-shell{padding:16px 14px 18px}
+    .chart-scroll{max-height:70vh;padding:10px}
+  }
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<a class="back-btn" href="./index.html#projects">← 返回项目列表</a>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">PROJECT · 小红书 / 全球化翻译</span>
+    <h1>AI-dubbing 评估标注流程</h1>
+    <p class="lead">从全站捞候选视频，到模型识别、语言过滤、人工验证、分发送评，再到多维度标注与聚合评分——一条完整的配音质量评估链路。</p>
+    <span class="hint">✳ 流程图较大，可滚动查看，右上角可缩放</span>
+  </header>
+
+  <div class="toolbar">
+    <span class="zoom-lbl">缩放</span>
+    <button class="zoom-btn" id="zoomOut" type="button">−</button>
+    <span class="zoom-lbl" id="zoomVal">100%</span>
+    <button class="zoom-btn" id="zoomIn" type="button">＋</button>
+    <button class="zoom-btn" id="zoomReset" type="button">重置</button>
+  </div>
+
+  <div class="chart-shell">
+    <div class="chart-scroll" id="chartScroll">
+      <div id="zoomLayer">
+        <div class="status" id="status">正在绘制流程图…</div>
+        <div id="diagram"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 配音前后对比 -->
+  <section class="compare">
+    <div class="compare-head">
+      <h2>配音前后对比</h2>
+      <span class="hint">同一条笔记：原声 vs AI 配音</span>
+      <button class="sync-btn" id="syncPlay" type="button">▶ 同步播放</button>
+    </div>
+    <div class="video-grid">
+      <div class="video-box">
+        <div class="video-label">〈 配音前 <span class="pill">原视频</span></div>
+        <video id="vidBefore" src="./原视频-small.mp4" controls preload="metadata" playsinline></video>
+        <div class="video-note">原始视频，保留创作者本人声音。</div>
+      </div>
+      <div class="video-box after">
+        <div class="video-label">配音后 〉 <span class="pill">AI dubbing</span></div>
+        <video id="vidAfter" src="./AI-dubbing-small.mp4" controls preload="metadata" playsinline></video>
+        <div class="video-note">经 ASR → 翻译 → TTS 全流程生成的配音版本。</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footnote">✦ AI-dubbing 评估标注流程 · 项目沉淀 ✦</div>
+</div>
+
+<script src="./vendor/mermaid.min.js"></script>
+<script>
+(function(){
+  var status = document.getElementById('status');
+  var diagram = document.getElementById('diagram');
+  var layer = document.getElementById('zoomLayer');
+  var scroll = document.getElementById('chartScroll');
+  var zoomVal = document.getElementById('zoomVal');
+  var level = 0.6;
+  function applyZoom(){
+    layer.style.zoom = level;
+    zoomVal.textContent = Math.round(level*100) + '%';
+  }
+  document.getElementById('zoomIn').addEventListener('click', function(){ level=Math.min(2,level+0.1); applyZoom(); });
+  document.getElementById('zoomOut').addEventListener('click', function(){ level=Math.max(0.4,level-0.1); applyZoom(); });
+  document.getElementById('zoomReset').addEventListener('click', function(){ level=1; applyZoom(); scroll.scrollTo(0,0); });
+
+  if(!window.mermaid){ status.textContent='流程图组件未能加载'; status.className='status err'; return; }
+  var GRAPH = `flowchart TD
+    classDef model fill:#E3F2FD,stroke:#1565C0,stroke-width:2px,color:#0D47A1
+    classDef manual fill:#FFF3E0,stroke:#E65100,stroke-width:2px,color:#BF360C
+    classDef decision fill:#FFFDE7,stroke:#F9A825,stroke-width:2px,color:#F57F17
+    classDef result fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px,color:#1B5E20
+    classDef fail fill:#FFEBEE,stroke:#C62828,stroke-width:2px,color:#B71C1C
+    classDef score fill:#F3E5F5,stroke:#6A1B9A,stroke-width:2px,color:#4A148C
+    classDef data fill:#E0F7FA,stroke:#00838F,stroke-width:2px,color:#006064
+    classDef note fill:#FFF9C4,stroke:#F9A825,stroke-width:1px,color:#6D4C41
+    classDef filter fill:#FCE4EC,stroke:#C62828,stroke-width:1px,color:#880E4F
+    classDef tag fill:#F1F8E9,stroke:#558B2F,stroke-width:1px,color:#33691E
+
+    %% =============================================
+    %% STEP 1
+    %% =============================================
+    subgraph S1["STEP1 全站捞候选视频 — 产品 之玉"]
+        S1_pool["全站视频笔记池"]:::data
+        S1_cond["筛选条件:<br/>1 横屏>=10s 或 竖屏>=120s<br/>2 音频时长>=10s<br/>3 中文: 14天曝光>=500<br/>4 英文: 14天曝光>=200"]:::filter
+        S1_zh["中译英 推荐+搜索各1000 共2000条"]:::data
+        S1_en["英译中 ~4000-6000条"]:::data
+        S1_pool --> S1_cond --> S1_zh & S1_en
+    end
+
+    %% =============================================
+    %% STEP 2
+    %% =============================================
+    subgraph S2["STEP2 模型处理 — 算法 哲瑞沈飞宇"]
+        S2_m[/"模型A 视频类别识别<br/>自动分类声音元素"/]:::model
+        S2_ok["可配音: 仅保留<br/>单人+纯音乐<br/>单人+无音乐+弱/无噪声"]:::result
+        S2_no["淘汰: 多人/歌声/强噪声等"]:::fail
+        S2_asr[/"模型B ASR<br/>语音转文本+时间戳<br/>识别源语言"/]:::model
+        S2_m -->|"可配音"| S2_ok -->  S2_asr
+        S2_m -->|"不可配音"| S2_no
+    end
+
+    %% =============================================
+    %% STEP 3
+    %% =============================================
+    subgraph S3["STEP3 语言过滤+段落切片 — 产品 之玉"]
+        S3_asr{"有ASR结果?"}:::decision
+        S3_no1["无结果淘汰"]:::fail
+        S3_lang{"主语言占比>=70%?"}:::decision
+        S3_no2["不足70%淘汰"]:::fail
+        S3_slice["随机切片: 连续5-6句 总时长<=1min"]:::data
+        S3_ok{"能切出合格段落?"}:::decision
+        S3_no3["无合格段落淘汰"]:::fail
+        S3_200["随机选中译英100+英译中100=200条"]:::result
+        S3_asr -->|"否"| S3_no1
+        S3_asr -->|"是"| S3_lang
+        S3_lang -->|"否"| S3_no2
+        S3_lang -->|"是"| S3_slice --> S3_ok
+        S3_ok -->|"否"| S3_no3
+        S3_ok -->|"是"| S3_200
+    end
+
+    %% =============================================
+    %% STEP 4
+    %% =============================================
+    subgraph S4["STEP4 人工验证可配音 — 吴涵团队"]
+        S4_r[/"人工逐条听视频切片"/]:::manual
+        S4_d{"确实可配音?"}:::decision
+        S4_y["确认可配音"]:::result
+        S4_n["模型误判剔除"]:::fail
+        S4_r --> S4_d
+        S4_d -->|"是"| S4_y
+        S4_d -->|"否"| S4_n
+    end
+
+    %% =============================================
+    %% STEP 5
+    %% =============================================
+    subgraph S5["STEP5 分发送评 — 产品 之玉"]
+        S5_x["剔除STEP4不可配音视频后 并行送评"]:::data
+    end
+
+    %% =============================================
+    %% 可配音标注细节
+    %% =============================================
+    subgraph EVA["是否可配音 标注细节 — 吴涵团队"]
+        EVA_in["输入: 模型标签+视频"]:::data
+        EVA_t1["标注1: 实际视频类型<br/>从11种标签中选择"]:::tag
+        EVA_t2["标注2: 实际源语言类型<br/>zh / en / 中英交杂 / 其他"]:::tag
+        EVA_t3["标注3: 噪声强弱判断"]:::tag
+        EVA_t4["标注4: 音效标签"]:::tag
+        EVA_t5["标注5: 视频备注<br/>若类别识别错误 写明可能误认原因"]:::tag
+        EVA_score["评分: 整体识别准确率<br/>= 模型识别正确数 / 采样总量<br/>可配音识别准确率<br/>= 正确数 / 模型认为可配音的量"]:::data
+        EVA_in --> EVA_t1 --> EVA_t2 --> EVA_t3 --> EVA_t4 --> EVA_t5 --> EVA_score
+    end
+
+    %% =============================================
+    %% ASR 标注细节
+    %% =============================================
+    subgraph EASR["ASR 标注细节 — 霍恩黄凯团队 分句维度"]
+        EASR_in[/"模型B ASR输出<br/>丢弃人工认定不可配音的视频"/]:::model
+        EASR_t1["标注1: 错别字分类 5选多<br/>a 人称代词错别字   <br/>b 专有名词错别字 <br/>c 常规词错误影响语义<br/>d 有错别字不影响语义<br/>  e 无错别字"]:::tag
+        EASR_t2["标注2: 断句问题<br/>ASR字幕标点多余/缺失/错误<br/>导致语义变更/看不懂/节奏变更"]:::tag
+        EASR_t3["标注3: 分段问题<br/>一句话被错误截断成两句<br/>或两句被错误合并成一句<br/>间隔很近的合并→不标<br/>停顿过长的截断→不标但备注<br/>一处分段问题影响两句 两句标"]:::tag
+        EASR_score{"ASR达标?<br/>存在任一时机/准确性问题→不合格"}:::decision
+        EASR_0["0分 不合格"]:::fail
+        EASR_1["1分 合格"]:::result
+        EASR_in --> EASR_t1 --> EASR_t2 --> EASR_t3 --> EASR_score
+        EASR_score -->|"有问题"| EASR_0
+        EASR_score -->|"无问题"| EASR_1
+    end
+
+    %% =============================================
+    %% 翻译 标注细节
+    %% =============================================
+    subgraph ETRANS["文本翻译 标注细节 — 明予+孙珂团队 分句维度"]
+        ETRANS_in[/"模型C翻译输出<br/>送评格式: HH:MM:SS 原句 翻译<br/>含上下文 丢弃不可配音视频"/]:::model
+        ETRANS_p1{"先看ASR文本+上下文<br/>看得懂?"}:::decision
+        ETRANS_drop["看不懂/明显歧义→丢弃<br/>可后续回捞"]:::fail
+        ETRANS_p1b["轻微分段问题<br/>不影响看懂 有点歧义"]:::data
+        ETRANS_listen["回听原音频辅助理解"]:::data
+        ETRANS_p1c{"翻译和原视频语义一致?"}:::decision
+        ETRANS_fix["3分 备注翻译修正音转文"]:::result
+        ETRANS_drop2["不一致→丢弃"]:::fail
+        ETRANS_eval[/"对照ASR文本语义打分<br/>参照翻译后文本上下文<br/>避免断句/分段导致单句误判"/]:::manual
+        ETRANS_tags["问题标签:<br/>a 语义偏差-其他 该翻的翻了但语义偏差<br/>b 文本增加/减少<br/>  结合文本上下文能理解核心语义→2分<br/>  关键信息丢失→0-1分<br/>  c 源语言已是目标语"]:::tag
+        ETRANS_3["3分 优秀: 准确且地道"]:::result
+        ETRANS_2["2分 合格: 语义对 不够地道<br/>或文本增减但核心语义完整"]:::score
+        ETRANS_1["1分 不合格: 关键信息丢失<br/>但有部分传达"]:::fail
+        ETRANS_0["0分 不合格: 语义偏差/漏译<br/>多译/乱序/看不懂"]:::fail
+        ETRANS_in --> ETRANS_p1
+        ETRANS_p1 -->|"看不懂"| ETRANS_drop
+        ETRANS_p1 -->|"看懂无歧义"| ETRANS_eval
+        ETRANS_p1 -->|"轻微歧义"| ETRANS_p1b --> ETRANS_listen --> ETRANS_p1c
+        ETRANS_p1c -->|"是"| ETRANS_fix
+        ETRANS_p1c -->|"否"| ETRANS_drop2
+        ETRANS_eval --> ETRANS_tags
+        ETRANS_tags --> ETRANS_3 & ETRANS_2 & ETRANS_1 & ETRANS_0
+    end
+
+    %% =============================================
+    %% TTS 人声效果 标注细节
+    %% =============================================
+    subgraph ETTS_V["TTS 人声效果 标注细节 — 吴涵团队 分句维度"]
+        ETTS_in[/"模型D TTS输出<br/>句子编号!=0的行<br/>丢弃不可配音视频"/]:::model
+        ETTS_p0["P0项 任一不达标→0分:<br/>a 配音音频质量<br/>  无扭曲/爆音/明显噪声/截断<br/>  原声就有噪声→不扣分<br/>  杂音原视频就有→2分<br/>  视频里听不太出→2分<br/>  听得出但声小或短暂→1分<br/>b 内容还原完整<br/>  与翻译后文本对齐 不漏句/多句/乱序<br/>  标签: 中英混杂 / 内容还原不完整<br/>  翻译中的中英混杂→标翻译问题不扣TTS<br/>c 清晰易懂<br/>  不看字幕能听清听懂<br/>  连读/口音不影响则不扣<br/>  上游ASR/翻译导致→标上游问题不扣TTS<br/>d 音画一致<br/>  关键画面内容要对上<br/>  地点/PPT/步骤/画面切换/人物动作<br/>  不要求口型对齐<br/>  不要求和原生字幕完全一致<br/>e 音色一致且相似<br/>  同一人前后一致+与原声相似<br/>  标签: 音色前后一致 / 音色不相似<br/>  中英音色有差异属正常不扣分"]:::tag
+        ETTS_p1["P1项 P0达标+P1未达标→1分:<br/>a 配音音频质量 完全无杂音<br/>b 自然度 像真人无机械感<br/>  个别机械感但整体自然可接受<br/>  原来就是AI配音→不做强要求<br/>c 语调节奏/情感体验<br/>  必要重音/停顿/节奏/音高<br/>  与原视频情感/重点/语气一致<br/>  必要且自然>全盘保留<br/>  已听不懂→按P0清晰易懂0分<br/>d 语速<br/>  标签: 语速过快 / 语速过慢"]:::tag
+        ETTS_other["其他标签 仅标注不影响得分:<br/>ASR问题: ASR识别导致的听不懂/音画不一致<br/>翻译问题: 翻译导致的听不懂/中英混杂"]:::note
+        ETTS_0["0分: P0任一不达标"]:::fail
+        ETTS_1["1分: P0达标 P1未全达标"]:::score
+        ETTS_2["2分: P0+P1均达标"]:::result
+        ETTS_in --> ETTS_p0
+        ETTS_p0 -->|"P0不达标"| ETTS_0
+        ETTS_p0 -->|"P0达标"| ETTS_p1
+        ETTS_p1 -->|"P1不全达标"| ETTS_1
+        ETTS_p1 -->|"P1达标"| ETTS_2
+    end
+
+    %% =============================================
+    %% TTS 原声和音量处理
+    %% =============================================
+    subgraph ETTS_S["TTS 原声和音量处理 — 吴涵团队 视频维度"]
+        ETTS_s_in["句子编号=0的行 整体听一遍"]:::data
+        ETTS_s_tags["评估维度:<br/>a 背景杂音<br/>    b BGM/背景音/音效被破坏<br/>       c 绝对音量不一致<br/>   d 其他"]:::tag
+        ETTS_s0["0分: 任一命中"]:::fail
+        ETTS_s1["1分: 都满足基本要求"]:::score
+        ETTS_s2["2分: 无上述问题"]:::result
+        ETTS_s_in --> ETTS_s_tags
+        ETTS_s_tags --> ETTS_s0 & ETTS_s1 & ETTS_s2
+    end
+
+    %% =============================================
+    %% 聚合评分
+    %% =============================================
+    subgraph AGG["聚合评分 — 离线计算"]
+        AGG_sent["单句人声综合:<br/>2分优秀 = ASR合格 + 翻译3分 + TTS人声2分<br/>1分合格 = ASR合格 + 翻译2/3分 + TTS人声1/2分<br/>0分 = 其他"]:::data
+        AGG_vid["视频维度:<br/>0分 = TTS原声0分 或 0分句子占比过高<br/>1分/2分 = 结合人声得分和原声得分"]:::data
+        AGG_final{"整体效果"}:::decision
+        AGG_2["2分优秀 可下发"]:::result
+        AGG_1["1分合格 可下发"]:::result
+        AGG_0["0分不合格 不可下发"]:::fail
+        AGG_out["配音视频生成"]:::result
+        AGG_sent --> AGG_vid --> AGG_final
+        AGG_final -->|"全优"| AGG_2
+        AGG_final -->|"全合格"| AGG_1
+        AGG_final -->|"任一不合格"| AGG_0
+        AGG_2 & AGG_1 --> AGG_out
+    end
+
+    %% =============================================
+    %% 主流程串联
+    %% =============================================
+    S1_zh & S1_en --> S2_m
+    S2_asr --> S3_asr
+    S3_200 --> S4_r
+    S4_y --> S5_x
+
+    S5_x -->|"送评是否可配音"| EVA_in
+    S5_x -->|"送评ASR"| EASR_in
+    S5_x -->|"送评翻译"| ETRANS_in
+    S5_x -->|"送评TTS人声"| ETTS_in
+    S5_x -->|"送评TTS原声"| ETTS_s_in
+
+    EASR_1 & ETRANS_3 & ETRANS_2 & ETTS_2 & ETTS_1 & ETTS_0 & ETTS_s2 & ETTS_s1 & ETTS_s0 --> AGG_sent
+
+    %% =============================================
+    %% 图例
+    %% =============================================
+    subgraph LEGEND["图例"]
+        L1[/"模型自动处理"/]:::model
+        L2[/"人工标注评估"/]:::manual
+        L3{"判断节点"}:::decision
+        L4["通过"]:::result
+        L5["不合格"]:::fail
+        L6["中间分"]:::score
+        L7["数据"]:::data
+        L8["筛选条件"]:::filter
+        L9["标注细节/标签"]:::tag
+    end`;
+  mermaid.initialize({
+    startOnLoad:false,
+    theme:'base',
+    securityLevel:'loose',
+    fontFamily:'"Xingkai SC","STXingkai","Kaiti SC",sans-serif',
+    themeVariables:{fontSize:'13px', primaryTextColor:'#2B2B2B', lineColor:'#888'},
+    flowchart:{useMaxWidth:false, htmlLabels:true, nodeSpacing:38, rankSpacing:48}
+  });
+  mermaid.render('dubFlow', GRAPH).then(function(res){
+    diagram.innerHTML = res.svg;
+    status.style.display='none';
+    applyZoom();
+  }).catch(function(err){
+    status.textContent='流程图渲染失败：' + (err && err.message ? err.message : 'unknown');
+    status.className='status err';
+  });
+
+  // 配音前后：各视频独立控制；仅“同步播放”按钮联动两者
+  var vb = document.getElementById('vidBefore');
+  var va = document.getElementById('vidAfter');
+  var syncBtn = document.getElementById('syncPlay');
+  var vids = [vb, va];
+  function setBtn(){
+    syncBtn.textContent = (vb.paused && va.paused) ? '▶ 同步播放' : '❚❚ 同步暂停';
+  }
+  // 播完后回到开头，保证可以反复播放
+  vids.forEach(function(v){
+    v.addEventListener('ended', function(){ try{ v.currentTime = 0; }catch(e){} setBtn(); });
+    v.addEventListener('play', setBtn);
+    v.addEventListener('pause', setBtn);
+  });
+  function playAll(){
+    // 若有视频已播完/停在末尾，先归零，实现“再播一遍”
+    vids.forEach(function(v){
+      if(v.ended || (v.duration && v.currentTime >= v.duration - 0.1)){
+        try{ v.currentTime = 0; }catch(e){}
+      }
+    });
+    var p = vb.duration ? vb.currentTime / vb.duration : 0;
+    try{ if(va.duration) va.currentTime = p * va.duration; }catch(e){}
+    vids.forEach(function(v){ var pr=v.play(); if(pr&&pr.catch) pr.catch(function(){}); });
+    setBtn();
+  }
+  function pauseAll(){ vids.forEach(function(v){ v.pause(); }); setBtn(); }
+  syncBtn.addEventListener('click', function(){
+    (vb.paused && va.paused) ? playAll() : pauseAll();
+  });
+})();
+</script>
+</body>
+</html>

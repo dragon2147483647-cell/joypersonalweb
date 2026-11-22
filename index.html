@@ -685,7 +685,18 @@
     });
   });
 
-  // 第三页：卡片进入动画 + 点击占位
+  // 第三页：项目卡片 → 对应详情页
+  var PROJ_URL = {
+    language:'./project-source-language-demo.html',
+    image:'./project-image-translation-demo.html',
+    dubbing:'./project-ai-dubbing-demo.html'
+  };
+  Object.keys(PROJ_URL).forEach(function(key){
+    var card = document.querySelector('[data-proj="' + key + '"]');
+    if(card) card.addEventListener('click', function(){ window.location.href = PROJ_URL[key]; });
+  });
+
+  // 第三页：卡片进入动画
   var projCards = document.querySelectorAll('.proj-card');
   if('IntersectionObserver' in window){
     var po = new IntersectionObserver(function(entries){

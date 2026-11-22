@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>图片翻译规则与标注 SOP · 交互流程图</title>
+<style>
+  :root{
+    --paper:#FFF7F2; --pink:#F7C9D9; --pink-soft:#FCE3EC; --pink-deep:#EA9FBB;
+    --ink:#2B2B2B; --lilac:#B7A2D6; --sky:#9FC7E2; --butter:#F6D77A; --mint:#A9D6BB;
+    --hand-cn:"Xingkai SC","STXingkai","Kaiti SC","STKaiti","KaiTi",cursive;
+    --hand-en:"Comic Sans MS","Chalkboard SE","Marker Felt","Segoe Print",cursive;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;color:var(--ink);font-family:var(--hand-cn);background:var(--paper);overflow-x:hidden;
+    background-image:
+      radial-gradient(ellipse 55% 20% at 2% 1%,rgba(247,201,217,.5),transparent 70%),
+      radial-gradient(ellipse 40% 14% at 99% 3%,rgba(247,201,217,.36),transparent 72%),
+      radial-gradient(ellipse 60% 12% at 50% 99%,rgba(247,201,217,.4),transparent 72%)}
+  .grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.18;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}
+  .wrap{width:min(1160px,calc(100% - 40px));margin:auto;position:relative;z-index:2}
+  .back-btn{position:fixed;left:22px;top:20px;z-index:80;font:700 15px var(--hand-cn);color:var(--ink);
+    background:#FFFEFC;border:3px solid var(--ink);border-radius:255px 14px 225px 16px/16px 225px 14px 255px;
+    padding:8px 16px;cursor:pointer;box-shadow:5px 6px 0 rgba(43,43,43,.16);text-decoration:none;transition:.16s}
+  .back-btn:hover{transform:translate(-2px,-2px);box-shadow:8px 9px 0 rgba(43,43,43,.2);background:var(--pink-soft)}
+  .back-btn:active{transform:translate(2px,2px);box-shadow:2px 3px 0 rgba(43,43,43,.18)}
+  h1,h2,h3{font-family:var(--hand-en)}
+  .hero{padding:60px 0 32px;text-align:center}
+  .eyebrow{display:inline-block;font:700 12px var(--hand-en);letter-spacing:.16em;border:2px solid var(--ink);
+    border-radius:14px 9px 16px 10px;padding:4px 12px;background:rgba(255,255,255,.8);transform:rotate(-2deg)}
+  .hero h1{font-size:clamp(36px,5.4vw,62px);line-height:1.08;margin:18px 0 10px;letter-spacing:-.02em}
+  .hero .lead{max-width:720px;margin:14px auto 0;font-size:16px;line-height:1.8;color:#7a5866}
+  .hero .hint{display:inline-block;margin-top:18px;font:13px var(--hand-en);background:var(--butter);
+    border:2px solid var(--ink);border-radius:20px;padding:6px 14px;transform:rotate(1deg)}
+
+  /* 流程图节点链 */
+  .flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;justify-content:center;margin:10px 0 34px}
+  .node{position:relative;flex:1 1 150px;min-width:140px;max-width:186px;min-height:132px;
+    background:#FFFEFC;border:3px solid var(--ink);border-radius:235px 16px 225px 18px/18px 225px 16px 235px;
+    box-shadow:6px 7px 0 rgba(43,43,43,.14);padding:14px 12px 12px;cursor:pointer;text-align:center;
+    transition:transform .2s,box-shadow .2s,background .2s}
+  .node:nth-child(odd){transform:rotate(-1.5deg)} .node:nth-child(even){transform:rotate(1.5deg)}
+  .node:hover{transform:translateY(-5px) rotate(0);box-shadow:10px 12px 0 rgba(43,43,43,.18)}
+  .node.active{background:var(--pink);box-shadow:10px 12px 0 rgba(43,43,43,.2);transform:translateY(-4px) rotate(0)}
+  .node .step{font:700 11px var(--hand-en);letter-spacing:.14em;color:#9a7a86}
+  .node .ttl{font-family:var(--hand-cn);font-size:22px;font-weight:700;margin:6px 0 8px;line-height:1.2}
+  .node .tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+  .node .tags span{font:11px var(--hand-en);border:1.8px solid var(--ink);border-radius:999px;padding:2px 7px;background:#fff}
+  .arrow{align-self:center;font-size:28px;color:var(--pink-deep);padding:0 6px;line-height:1}
+  .node .badge{position:absolute;right:-8px;top:-12px;width:32px;height:32px;border:2.5px solid var(--ink);
+    border-radius:50%;background:var(--butter);display:grid;place-items:center;font:900 15px var(--hand-en);transform:rotate(9deg)}
+
+  /* 详情面板 */
+  .detail{background:#FFFEFC;border:3px solid var(--ink);border-radius:245px 18px 255px 16px/18px 245px 16px 255px;
+    box-shadow:9px 11px 0 rgba(43,43,43,.13);padding:26px 30px 30px}
+  .panel{display:none;animation:fade .35s ease} .panel.active{display:block}
+  @keyframes fade{from{transform:translateY(8px)}to{transform:none}}
+  .panel h2{margin:0 0 4px;font-size:30px;display:flex;align-items:center;gap:12px}
+  .panel h2 .n{font:900 16px var(--hand-en);color:#fff;background:var(--pink-deep);border:2px solid var(--ink);
+    border-radius:50%;width:34px;height:34px;display:grid;place-items:center;transform:rotate(-6deg)}
+  .panel .desc{font-size:15px;line-height:1.85;color:#6b5060;margin:8px 0 18px}
+  .kinds{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .kind{border:2.5px solid var(--ink);border-radius:230px 16px 225px 18px/18px 225px 16px 230px;padding:16px 18px}
+  .kind.strong{background:#EAF3E4} .kind.weak{background:#FDF0D8}
+  .kind.none{background:#F0ECF2} .kind.bad{background:#FBE4E4}
+  .kind.poor{background:#FBEEDC} .kind.value{background:#E4EFF7}
+  .kind h3{margin:0 0 10px;font-size:20px;display:flex;align-items:center;gap:8px}
+  .kind h3 .dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink)}
+  .kind.strong .dot{background:#8DBE7A} .kind.weak .dot{background:var(--butter)}
+  .kind.none .dot{background:var(--lilac)} .kind.bad .dot{background:#E98C8C}
+  .kind.poor .dot{background:#E7B36A} .kind.value .dot{background:var(--sky)}
+  .kind ul{margin:0;padding-left:19px;line-height:1.9;font-size:14.5px;color:#5a4650}
+  .kind li{margin:2px 0}
+  .note{background:var(--pink-soft);border-left:4px solid var(--pink-deep);padding:10px 14px;
+    font-size:14px;line-height:1.8;margin:16px 0 0;color:#6b4152}
+  .scores{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px}
+  .score{border:3px solid var(--ink);border-radius:18px;padding:18px;text-align:center}
+  .score .s{font:900 40px var(--hand-en);line-height:1}
+  .score.s0{background:#FBE4E4} .score.s1{background:#FDF0D8} .score.s2{background:#EAF3E4}
+  .score .l{font-size:15px;margin-top:8px;line-height:1.6}
+  .rules{line-height:1.95;font-size:15px;color:#5a4650}
+  .rules ol{padding-left:22px;margin:8px 0} .rules li{margin:6px 0}
+  .rules .hl{background:linear-gradient(transparent 62%,var(--pink) 62%);font-weight:700}
+  .footnote{text-align:center;font:13px var(--hand-en);color:#9a7a86;padding:22px 0 40px}
+
+  @media(max-width:900px){
+    .wrap{width:calc(100% - 32px)}
+    .hero h1{font-size:34px;word-break:break-word}
+    .hero .lead{font-size:14px}
+    .flow{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+    .node{max-width:none;min-width:0;min-height:104px;padding:12px 8px}
+    .node .ttl{font-size:19px}
+    .node .tags span{font-size:10px;padding:2px 5px}
+    .arrow{display:none}
+    .detail{padding:20px 18px 24px;width:100%;overflow:hidden}
+    .panel h2{font-size:24px;word-break:break-word}
+    .scores{grid-template-columns:1fr}
+    .kinds{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<a class="back-btn" href="./index.html#projects">← 返回项目列表</a>
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">SOP · 小红书 / 图片翻译</span>
+    <h1>图片翻译规则与标注 SOP</h1>
+    <p class="lead">OCR 识别出文字之后，按「意图 → 渲染 → 高价值」三步判断哪些文字该翻、哪些不该翻，最后对渲染效果打分。</p>
+    <span class="hint">✳ 点击流程图节点，查看每一步的具体规则</span>
+  </header>
+
+  <div class="flow" role="tablist" aria-label="标注流程节点">
+    <button class="node active" type="button" data-node="start" role="tab" aria-selected="true">
+      <span class="badge">0</span>
+      <div class="step">START</div>
+      <div class="ttl">OCR 识别</div>
+      <div class="tags"><span>流程开始</span></div>
+    </button>
+    <span class="arrow">➜</span>
+    <button class="node" type="button" data-node="intent" role="tab" aria-selected="false">
+      <span class="badge">1</span>
+      <div class="step">STEP 1</div>
+      <div class="ttl">意图判断</div>
+      <div class="tags"><span>强</span><span>弱</span><span>无</span></div>
+    </button>
+    <span class="arrow">➜</span>
+    <button class="node" type="button" data-node="render" role="tab" aria-selected="false">
+      <span class="badge">2</span>
+      <div class="step">STEP 2</div>
+      <div class="ttl">渲染判断</div>
+      <div class="tags"><span>不可渲染</span><span>效果差</span></div>
+    </button>
+    <span class="arrow">➜</span>
+    <button class="node" type="button" data-node="value" role="tab" aria-selected="false">
+      <span class="badge">3</span>
+      <div class="step">STEP 3</div>
+      <div class="ttl">是否高价值</div>
+      <div class="tags"><span>是</span><span>否</span></div>
+    </button>
+    <span class="arrow">➜</span>
+    <button class="node" type="button" data-node="score" role="tab" aria-selected="false">
+      <span class="badge">4</span>
+      <div class="step">OUTPUT</div>
+      <div class="ttl">渲染打分</div>
+      <div class="tags"><span>0 · 1 · 2</span></div>
+    </button>
+    <span class="arrow">➜</span>
+    <button class="node" type="button" data-node="notes" role="tab" aria-selected="false">
+      <span class="badge">✳</span>
+      <div class="step">RULES</div>
+      <div class="ttl">标注要点</div>
+      <div class="tags"><span>两遍标注</span></div>
+    </button>
+  </div>
+
+  <div class="detail">
+    <!-- 0 开始 -->
+    <div class="panel active" id="p-start">
+      <h2><span class="n">0</span>流程开始 · OCR 识别出文字</h2>
+      <p class="desc">先由 OCR 识别出图片中的所有文字块，然后进入三步判断：意图判断 → 渲染判断 → 是否高价值，最后对渲染效果打分。</p>
+      <div class="note">整体链路：OCR 识别文字 → 分块判断意图（强 / 弱 / 无）→ 判断是否可渲染 → 判断是否高价值 → 渲染效果打分。</div>
+    </div>
+
+    <!-- 1 意图判断 -->
+    <div class="panel" id="p-intent">
+      <h2><span class="n">1</span>Step 1 · 意图判断</h2>
+      <p class="desc">判断每一块文字是「有意识要传递信息」还是「附带出现的」。弱意图的判断视角：从用户视角判断——是用于传递信息的有意识表达吗？</p>
+      <div class="kinds">
+        <div class="kind strong">
+          <h3><span class="dot"></span>强意图</h3>
+          <ul><li>标题</li><li>介绍 / 文字说明</li><li>APP 截图</li></ul>
+        </div>
+        <div class="kind weak">
+          <h3><span class="dot"></span>弱意图</h3>
+          <ul><li>物品自带文字：标签、说明书、广告牌、手写笔记等</li><li>设备水印</li></ul>
+        </div>
+        <div class="kind none">
+          <h3><span class="dot"></span>无意图</h3>
+          <ul><li>数字 / 货币 / 商标 / 公章</li><li>虚化文字</li><li>字素 / 艺术字</li><li>个人水印</li></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 渲染判断 -->
+    <div class="panel" id="p-render">
+      <h2><span class="n">2</span>Step 2 · 渲染判断</h2>
+      <p class="desc">判断文字块在翻译渲染后能否正常呈现，分为「不可渲染」和「渲染效果差」两类。</p>
+      <div class="kinds">
+        <div class="kind bad">
+          <h3><span class="dot"></span>不可渲染</h3>
+          <ul><li>竖排文字</li><li>重叠文字</li><li>不连续文字（一字一坑）</li><li>虚化字</li><li>艺术字</li></ul>
+        </div>
+        <div class="kind poor">
+          <h3><span class="dot"></span>渲染效果差</h3>
+          <ul><li>文字过小</li><li>文字过多</li><li>排版复杂的人工制图</li><li>复杂的 APP 截图</li><li>人脸与身体</li></ul>
+        </div>
+      </div>
+      <div class="note">标注时先排除三大类不可渲染的【文字过多】【排版复杂的人工制图】【复杂的 app 截图】→ 标不可渲染，不需要判断 OCR 框。</div>
+    </div>
+
+    <!-- 3 高价值 -->
+    <div class="panel" id="p-value">
+      <h2><span class="n">3</span>Step 3 · 是否高价值</h2>
+      <p class="desc">对不可渲染的图片，进一步判断是否属于高价值内容——高价值则走端侧翻译，否则流程结束。</p>
+      <div class="kinds">
+        <div class="kind value">
+          <h3><span class="dot"></span>高价值内容</h3>
+          <ul><li>旅行攻略</li><li>产品评测</li><li>影视综艺台词截图</li><li>娱乐资讯</li></ul>
+        </div>
+      </div>
+      <div class="note">判断结果：是高价值 → 走端侧翻译；不是 → 流程结束。</div>
+    </div>
+
+    <!-- 4 打分 -->
+    <div class="panel" id="p-score">
+      <h2><span class="n">4</span>输出 · 渲染效果打分</h2>
+      <p class="desc">以上判断完成后，对模型输出渲染后的效果打分：</p>
+      <div class="scores">
+        <div class="score s0"><div class="s">0</div><div class="l">有错误、<b>不合格</b></div></div>
+        <div class="score s1"><div class="s">1</div><div class="l">没有错误但细节不完美、<b>合格</b></div></div>
+        <div class="score s2"><div class="s">2</div><div class="l">各方面细节都很好、<b>优秀</b></div></div>
+      </div>
+    </div>
+
+    <!-- 5 标注要点 -->
+    <div class="panel" id="p-notes">
+      <h2><span class="n">✳</span>标注流程要点</h2>
+      <div class="rules">
+        <p><b>1. 先判断整张图意图，优先级 强 &gt; 弱 &gt; 无。</b></p>
+        <ol>
+          <li>首先排除三大类不可渲染的<span class="hl">【文字过多】【排版复杂的人工制图】【复杂的 app 截图】</span>→ 标不可渲染，不需要判断 OCR 框。</li>
+          <li><b>if 含有强意图：</b>
+            <br>强 + 强 → 只要有 1 个强意图可渲染，整张图可渲染；如果有不可渲染的 OCR 框，需要标记。
+            <br>强 + 弱 或 强 + 无 → 只要有 1 个强意图可渲染，整张图可渲染；如果有不可渲染的 OCR 框，需要标记。</li>
+          <li><b>if 含有弱意图：</b>
+            <br>纯弱 → 分别判断 OCR 框是否可渲染，只要有 1 个框可渲染，图片标为可渲染；如有不可渲染的框需要标出。
+            <br>弱 + 无 → 分别判断 OCR 框是否可渲染，只要有 1 个框可渲染，图片标为可渲染；如有不可渲染的框需要标出。</li>
+          <li><b>if 无意图 →</b> 标不可渲染，不需要判断 OCR 框。</li>
+        </ol>
+        <p><b>2. 实际标注中，第一遍先标意图，第二遍再标不可渲染的 OCR 框。第一遍把含有不可渲染的 OCR 框的图片标记出来。</b></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footnote">✦ 图片翻译规则与标注 SOP · 项目沉淀 ✦</div>
+</div>
+
+<script>
+  var nodes = document.querySelectorAll('.node');
+  var panels = document.querySelectorAll('.panel');
+  nodes.forEach(function(n){
+    n.addEventListener('click', function(){
+      nodes.forEach(function(x){ x.classList.remove('active'); x.setAttribute('aria-selected','false'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      n.classList.add('active');
+      n.setAttribute('aria-selected','true');
+      var key = n.getAttribute('data-node');
+      var panel = document.getElementById('p-' + key);
+      if(panel){ panel.classList.add('active'); }
+    });
+  });
+</script>
+</body>
+</html>
