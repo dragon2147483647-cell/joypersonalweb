@@ -104,12 +104,22 @@
     background:rgba(246,215,122,.82);border:1.5px solid rgba(43,43,43,.35);
     transform:translateX(-50%) rotate(-4deg)}
 
-  /* ===== 右侧手写欢迎语 ===== */
-  .welcome{position:absolute;z-index:3;left:88%;top:50%;width:300px;transform:translate(-50%,-50%) rotate(2deg)}
-  .welcome h1{margin:0;font-family:var(--hand-en);font-weight:700;font-size:clamp(36px,3.4vw,52px);line-height:1.06;letter-spacing:-.02em;
-    text-shadow:.6px .6px 0 rgba(43,43,43,.18)}
-  .welcome .squiggle{margin:6px 0 2px;width:200px;height:18px}
-  .welcome   .ready{font-family:var(--hand-en);font-size:20px;color:#7a5490}
+  /* ===== 右侧手写欢迎语：手绘字母拼贴 ===== */
+  .welcome{position:absolute;z-index:3;left:84%;top:50%;width:460px;transform:translate(-50%,-50%) rotate(2deg)}
+  .welcome h1{margin:0;line-height:1}
+  .welcome .wrow{display:flex;flex-wrap:nowrap;gap:3px 4px;align-items:center;white-space:nowrap}
+  .welcome .lt{display:inline-block;font:clamp(22px,2.1vw,31px)/1 'Marker',var(--hand-en);color:#231a1a;
+    padding:1px 5px 4px;background:#fff;box-shadow:2px 3px 0 rgba(43,43,43,.2);position:relative}
+  .welcome .lt:nth-child(7n+1){background:#F7C9D9;transform:rotate(-6deg)}
+  .welcome .lt:nth-child(7n+2){background:#FFF6DF;transform:rotate(4deg)}
+  .welcome .lt:nth-child(7n+3){background:#fff;transform:rotate(-3deg)}
+  .welcome .lt:nth-child(7n+4){background:#FCE3EC;transform:rotate(6deg)}
+  .welcome .lt:nth-child(7n+5){background:#fff;transform:rotate(-4deg)}
+  .welcome .lt:nth-child(7n+6){background:#F7C9D9;transform:rotate(3deg)}
+  .welcome .lt:nth-child(7n+7){background:#FFF6DF;transform:rotate(-5deg)}
+  .welcome .lt.sp{background:transparent;box-shadow:none;width:10px}
+  .welcome .squiggle{margin:8px 0 2px;width:200px;height:18px}
+  .welcome   .ready{font-family:'Marker',var(--hand-en);font-size:20px;color:#7a5490}
 
   /* ===== 底部小注脚 ===== */
   .foot{position:absolute;z-index:2;left:50%;bottom:2%;transform:translateX(-50%);font-family:var(--hand-en);
@@ -221,7 +231,88 @@
   .proj-card .go{margin-top:14px;font:700 13px var(--hand-en);letter-spacing:.06em;text-align:center;
     border:2.5px solid var(--ink);border-radius:20px;padding:7px 10px;background:var(--butter);transform:rotate(-1deg)}
   .proj-card:hover .go{background:var(--pink)}
+  /* ===== 第四页：Dreams / Goals 众星捧月 ===== */
+  .dreams{position:relative;overflow:hidden;padding:88px 0 120px;background:transparent}
+  .dreams:before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.14;z-index:1;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}
+  .dreams-wrap{position:relative;z-index:2;width:min(1180px,calc(100% - 56px));margin:auto}
+  /* 马克笔 / 剪贴拼贴风字体 */
+  @font-face{font-family:'Marker';src:url('./fonts/permanent-marker.woff2') format('woff2');font-display:swap}
+  @font-face{font-family:'ZKOOL';src:url('./fonts/zcool-kuaile-116-400-normal.woff2') format('woff2');font-display:swap;unicode-range:U+2b,U+40,U+3000,U+300a-300b,U+4e16,U+4e66,U+4e70,U+4e91-4e92,U+4e94,U+4e9b,U+4ec0,U+4eca,U+4f01,U+4f17-4f18,U+4f46,U+4f4e,U+4f9b,U+4fee,U+503c,U+5065,U+50cf,U+513f,U+5148,U+518d,U+51c6,U+51e0,U+5217,U+529e-529f,U+5341,U+534f,U+5361,U+5386,U+53c2,U+53c8,U+53cc,U+53d7-53d8,U+53ea,U+5404,U+5411,U+5417,U+5427,U+5468,U+559c,U+5668,U+56e0,U+56e2,U+56ed,U+5740,U+57fa,U+58eb,U+5904,U+592a,U+59cb,U+5a31,U+5b58,U+5b9d,U+5bc6,U+5c71,U+5dde,U+5df1,U+5e08,U+5e26,U+5e2e,U+5e93,U+5e97,U+5eb7,U+5f15,U+5f20,U+5f3a,U+5f62,U+5f69,U+5f88,U+5f8b,U+5fc5,U+600e,U+620f,U+6218,U+623f,U+627e,U+628a,U+62a4,U+62db,U+62e9,U+6307,U+6362,U+636e,U+64ad,U+6539,U+653f,U+6548,U+6574,U+6613,U+6625,U+663e,U+666f,U+672a,U+6750,U+6784,U+6a21,U+6b3e,U+6b65,U+6bcf,U+6c11,U+6c5f,U+6df1,U+706b,U+7167,U+724c,U+738b,U+73a9,U+73af,U+7403,U+7537,U+754c,U+7559,U+767d,U+7740,U+786e,U+795e,U+798f,U+79f0,U+7aef,U+7b7e,U+7bb1,U+7ea2,U+7ea6,U+7ec4,U+7ec6,U+7ecd,U+7edc,U+7ef4,U+8003,U+80b2,U+81f3-81f4,U+822a,U+827a,U+82f1,U+83b7,U+8425,U+89c2,U+89c8,U+8ba9,U+8bb8,U+8bc6,U+8bd5,U+8be2,U+8be5,U+8bed,U+8c03,U+8d23,U+8d2d,U+8d34,U+8d70,U+8db3,U+8fbe,U+8fce,U+8fd1,U+8fde,U+9001,U+901f-9020,U+90a3,U+914d,U+91c7,U+94fe,U+9500,U+952e,U+9605,U+9645,U+9662,U+9664,U+9700,U+9752,U+975e,U+97f3,U+9879,U+9886,U+98df,U+9a6c,U+9a8c,U+9ed1,U+9f99}
+  @font-face{font-family:'ZKOOL';src:url('./fonts/zcool-kuaile-117-400-normal.woff2') format('woff2');font-display:swap;unicode-range:U+4e,U+201c-201d,U+3010-3011,U+4e07,U+4e1c,U+4e24,U+4e3e,U+4e48,U+4e50,U+4e5f,U+4e8b-4e8c,U+4ea4,U+4eab-4eac,U+4ecb,U+4ece,U+4ed6,U+4ee3,U+4ef6-4ef7,U+4efb,U+4f20,U+4f55,U+4f7f,U+4fdd,U+505a,U+5143,U+5149,U+514d,U+5171,U+5177,U+518c,U+51fb,U+521b,U+5229,U+522b,U+52a9,U+5305,U+5317,U+534e,U+5355,U+5357,U+535a,U+5373,U+539f,U+53bb,U+53ca,U+53cd,U+53d6,U+53e3,U+53f0,U+5458,U+5546,U+56db,U+573a,U+578b,U+57ce,U+58f0,U+590d,U+5934,U+5973,U+5b57,U+5b8c,U+5b98,U+5bb9,U+5bfc,U+5c06,U+5c11,U+5c31,U+5c55,U+5df2,U+5e03,U+5e38,U+5e76,U+5e94,U+5efa,U+5f71,U+5f97,U+5feb,U+6001,U+603b,U+60f3,U+611f,U+6216,U+624d,U+6253,U+6295,U+6301,U+6392,U+641c,U+652f,U+653e,U+6559,U+6599,U+661f,U+671f,U+672f,U+6761,U+67e5,U+6807,U+6837,U+683c,U+6848,U+6b22,U+6b64,U+6bd4,U+6c14,U+6c34,U+6c42,U+6ca1,U+6d41,U+6d77,U+6d88,U+6e05,U+6e38,U+6e90,U+7136,U+7231,U+7531,U+767e,U+76ee,U+76f4,U+771f,U+7801,U+793a,U+79cd,U+7a0b,U+7a7a,U+7acb,U+7ae0,U+7b2c,U+7b80,U+7ba1,U+7cbe,U+7d22,U+7ea7,U+7ed3,U+7ed9,U+7edf,U+7f16,U+7f6e,U+8001,U+800c,U+8272,U+8282,U+82b1,U+8350,U+88ab,U+88c5,U+897f,U+89c1,U+89c4,U+89e3,U+8a00,U+8ba1,U+8ba4,U+8bae-8bb0,U+8bbe,U+8bc1,U+8bc4,U+8bfb,U+8d28,U+8d39,U+8d77,U+8d85,U+8def,U+8eab,U+8f66,U+8f6c,U+8f7d,U+8fd0,U+9009,U+90ae,U+90fd,U+91cc-91cd,U+91cf,U+95fb,U+9650,U+96c6,U+9891,U+98ce,U+ff1f}
+  @font-face{font-family:'ZKOOL';src:url('./fonts/zcool-kuaile-118-400-normal.woff2') format('woff2');font-display:swap;unicode-range:U+d,U+3e,U+5f,U+7c,U+a0,U+a9,U+4e09-4e0b,U+4e0d-4e0e,U+4e13,U+4e1a,U+4e2a,U+4e3a-4e3b,U+4e4b,U+4e86,U+4e8e,U+4ea7,U+4eba,U+4ee4-4ee5,U+4eec,U+4f1a,U+4f4d,U+4f53,U+4f5c,U+4f60,U+4fe1,U+5165,U+5168,U+516c,U+5173,U+5176,U+5185,U+51fa,U+5206,U+5230,U+5236,U+524d,U+529b,U+52a0-52a1,U+52a8,U+5316,U+533a,U+53cb,U+53d1,U+53ef,U+53f7-53f8,U+5408,U+540c-540e,U+544a,U+548c,U+54c1,U+56de,U+56fd-56fe,U+5728,U+5730,U+5907,U+5916,U+591a,U+5927,U+5929,U+597d,U+5982,U+5b50,U+5b66,U+5b89,U+5b9a,U+5b9e,U+5ba2,U+5bb6,U+5bf9,U+5c0f,U+5de5,U+5e02,U+5e73-5e74,U+5e7f,U+5ea6,U+5f00,U+5f0f,U+5f53,U+5f55,U+5fae,U+5fc3,U+6027,U+606f,U+60a8,U+60c5,U+610f,U+6210-6211,U+6237,U+6240,U+624b,U+6280,U+62a5,U+63a5,U+63a8,U+63d0,U+6536,U+6570,U+6587,U+65b9,U+65e0,U+65f6,U+660e,U+662d,U+662f,U+66f4,U+6700,U+670d,U+672c,U+673a,U+6743,U+6765,U+679c,U+682a,U+6b21,U+6b63,U+6cbb,U+6cd5,U+6ce8,U+6d3b,U+70ed,U+7247-7248,U+7269,U+7279,U+73b0,U+7406,U+751f,U+7528,U+7535,U+767b,U+76f8,U+770b,U+77e5,U+793e,U+79d1,U+7ad9,U+7b49,U+7c7b,U+7cfb,U+7ebf,U+7ecf,U+7f8e,U+8005,U+8054,U+80fd,U+81ea,U+85cf,U+884c,U+8868,U+8981,U+89c6,U+8bba,U+8bdd,U+8bf4,U+8bf7,U+8d44,U+8fc7,U+8fd8-8fd9,U+8fdb,U+901a,U+9053,U+90e8,U+91d1,U+957f,U+95e8,U+95ee,U+95f4,U+9762,U+9875,U+9898,U+9996,U+9ad8,U+ff01,U+ff08-ff09}
+  .marker{font-family:'Marker',var(--hand-en);font-weight:400}
+  .dreams-head{text-align:left;margin:6px 0 0;position:relative}
+  /* 剪贴字母标题：每个字母一张小纸片 */
+  .collage-title{display:flex;flex-wrap:wrap;gap:2px 3px;line-height:1;margin:8px 0 6px;transform:rotate(-2deg)}
+  .collage-title .cl{display:inline-block;font:clamp(30px,5.2vw,58px)/1 'Marker',var(--hand-en);
+    color:#231a1a;padding:2px 8px 6px;background:#fff;position:relative;
+    box-shadow:3px 4px 0 rgba(43,43,43,.22)}
+  .collage-title .cl:nth-child(4n+1){background:#F7C9D9;transform:rotate(-6deg)}
+  .collage-title .cl:nth-child(4n+2){background:#FFF6DF;transform:rotate(4deg)}
+  .collage-title .cl:nth-child(4n+3){background:#FCE3EC;transform:rotate(-3deg)}
+  .collage-title .cl:nth-child(4n+4){background:#fff;transform:rotate(7deg)}
+  .collage-title .cl.sp{background:transparent;box-shadow:none;width:16px}
+  .collage-mark{position:absolute;right:2%;top:-4px;font:26px 'Marker',var(--hand-en);color:#EA9FBB;transform:rotate(14deg)}
+  .dreams-stage{position:relative;width:100%;height:720px;margin:14px auto 0}
+  /* 中间：QQ 人无边框，直接悬浮晃动 */
+  .dream-avatar{position:absolute;left:calc(50% - 140px);top:calc(50% - 200px);width:280px;z-index:3;text-align:center;
+    opacity:0;transform:scale(.9);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+  .dream-avatar.in{opacity:1;transform:scale(1)}
+  .dream-avatar img{width:100%;height:auto;display:block;
+    filter:drop-shadow(6px 12px 10px rgba(180,120,150,.22));animation:qqFloat 3.6s ease-in-out infinite}
+  @keyframes qqFloat{0%,100%{transform:translateY(0) rotate(-1.4deg)}50%{transform:translateY(-13px) rotate(1.4deg)}}
+  /* 三个手绘涂鸦气泡：形状各异，无统一黑框 */
+  .goal-card{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;cursor:pointer;z-index:4;background:transparent;border:0;padding:18px;
+    opacity:0;transform:translateY(26px) rotate(var(--rot,0deg));
+    transition:opacity .55s ease,transform .38s cubic-bezier(.2,.8,.2,1)}
+  .goal-card.in{opacity:1;transform:translateY(0) rotate(var(--rot,0deg))}
+  .goal-card:hover,.goal-card:focus-visible{transform:translateY(-8px) rotate(0deg) scale(1.05);outline:none;z-index:7}
+  .goal-card:active{transform:translateY(-2px) scale(.98)}
+  .goal-card .blob{position:absolute;inset:0;z-index:-1;width:100%;height:100%}
+  /* 上：粉色蜡笔涂抹椭圆 */
+  .gc1{left:calc(50% - 165px);top:0;width:330px;height:160px;--rot:-3deg}
+  /* 左：紫色不规则涂鸦圈 */
+  .gc2{left:0;top:calc(50% - 88px);width:300px;height:176px;--rot:5deg}
+  /* 右：黄色撕纸便利贴 */
+  .gc3{right:0;top:calc(50% - 84px);width:310px;height:168px;--rot:-4deg}
+  .goal-card h3{font-family:'ZKOOL',var(--hand-cn);font-size:34px;font-weight:700;color:#2a1d1d;
+    margin:0 0 2px;line-height:1.15;text-shadow:2px 2px 0 rgba(255,255,255,.85)}
+  .goal-card p{font:19px 'Marker',var(--hand-en);color:#5a3a4a;margin:0;letter-spacing:.01em;
+    text-shadow:1.5px 1.5px 0 rgba(255,255,255,.9)}
+  .dream-doodle{position:absolute;z-index:2;pointer-events:none}
+  .dream-doodle svg{display:block;width:100%;height:100%;overflow:visible}
+  .dst1{width:40px;height:40px;left:30%;top:9%;transform:rotate(14deg)}
+  .dst2{width:32px;height:32px;right:28%;top:16%;transform:rotate(-16deg)}
+  .dst3{width:36px;height:36px;left:18%;bottom:20%;transform:rotate(22deg)}
+  .dht1{width:30px;height:30px;right:17%;bottom:24%;transform:rotate(-10deg)}
+  .dmo1{width:38px;height:38px;left:44%;top:3%;transform:rotate(8deg)}
+  .dmo2{width:26px;height:26px;right:38%;bottom:9%;transform:rotate(-18deg)}
+  /* 礼花画布 + 鼠标小心心 */
+  #fxCanvas{position:fixed;inset:0;z-index:190;pointer-events:none;display:block}
+  .trail-heart{position:fixed;z-index:195;pointer-events:none;font:20px var(--hand-en);color:#EA9FBB;
+    text-shadow:0 1px 0 #fff;animation:heartFloat .95s ease-out forwards}
+  @keyframes heartFloat{0%{opacity:.9;transform:translate(-50%,-50%) scale(.7)}
+    60%{opacity:.7}100%{opacity:0;transform:translate(-50%,-160%) scale(1.25)}}
+  /* 鼠标黄色小星星（首页 / 实习 / 项目页） */
+  .trail-star{position:fixed;z-index:195;pointer-events:none;font:22px var(--hand-en);color:#F2C94C;
+    text-shadow:1px 1px 0 #fff,0 0 6px rgba(242,201,76,.5);animation:starFloat 1s ease-out forwards}
+  @keyframes starFloat{0%{opacity:.95;transform:translate(-50%,-50%) scale(.5) rotate(0deg)}
+    55%{opacity:.8}100%{opacity:0;transform:translate(-50%,40px) scale(1.15) rotate(90deg)}}
+
   @media(max-width:900px){
+    .dreams{padding:64px 0 84px}
+    .dreams-stage{height:auto;display:flex;flex-direction:column;align-items:center;gap:26px}
+    .dream-avatar,.goal-card{position:relative;left:auto;right:auto;top:auto;bottom:auto;width:min(320px,88%);transform:none;
+      margin:0;opacity:1}
+    .dream-avatar{order:0;align-self:center;left:auto;top:auto;position:relative;width:min(260px,70%)}
+    .goal-card{order:1;--rot:0deg;position:relative;left:auto;right:auto;top:auto;
+      width:min(300px,88%);height:150px;flex:none;margin:0}
+    .goal-card.in{transform:none}
+    .goal-card:hover,.goal-card:focus-visible{transform:translateY(-6px) scale(1.02)}
+    .collage-title .cl{font-size:clamp(22px,7vw,36px);padding:1px 5px 4px}
+    .dream-doodle{display:none}
     .stage{width:calc(100% - 32px);height:auto;min-height:0;padding:36px 0 120px}
     .pink-paper{top:1%;bottom:2%}
     .card,.hero-center,.welcome,.foot{position:relative;inset:auto;right:auto;left:auto;top:auto;bottom:auto;transform:none}
@@ -250,8 +341,30 @@
     .proj-card{min-height:0;transform:none;opacity:1}
     .proj-card .media{min-height:190px}
   }
+  /* 简历弹窗 */
+  body.modal-open{overflow:hidden}
+  .cv-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;
+    padding:3vh 4vw;background:rgba(43,43,43,.62);backdrop-filter:blur(3px)}
+  .cv-modal.open{display:flex;animation:fadeModal .22s ease}
+  @keyframes fadeModal{from{opacity:0}to{opacity:1}}
+  .cv-sheet{position:relative;height:94vh;width:calc(94vh * 0.707 + 34px);max-width:94vw;
+    background:#FFFEFC;border:3px solid var(--pink-deep);border-radius:235px 16px 225px 14px/16px 225px 14px 235px;
+    box-shadow:9px 11px 0 rgba(234,159,187,.4);padding:14px;overflow:hidden;
+    animation:popModal .28s cubic-bezier(.2,.85,.25,1)}
+  @keyframes popModal{from{transform:scale(.94) rotate(-1deg);opacity:0}to{transform:none;opacity:1}}
+  .cv-close{position:absolute;right:10px;top:8px;z-index:3;width:34px;height:34px;border:2.5px solid var(--pink-deep);
+    border-radius:50%;background:#FFF7F2;font:700 20px var(--hand-en);color:#a8527a;cursor:pointer;
+    box-shadow:3px 4px 0 rgba(234,159,187,.4);line-height:1}
+  .cv-close:hover{background:var(--pink);transform:rotate(90deg)}
+  .cv-frame{width:100%;height:100%;border:0;border-radius:6px;background:#fff;display:block;
+    object-fit:contain}
+  @media(max-width:900px){
+    .cv-sheet{width:94vw;height:92vh;padding:12px;border-radius:170px 12px 165px 12px/12px 165px 12px 170px}
+  }
   @media(prefers-reduced-motion:reduce){
     .card,.portrait{transition:none}
+    .cv-modal.open,.cv-sheet{animation:none}
+    .dream-avatar img{animation:none}
   }
 </style>
 </head>
@@ -315,7 +428,7 @@
   <span class="doodle d5" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 5 Q22 17 35 20 Q22 23 20 35 Q18 23 5 20 Q18 17 20 5Z" fill="#A9D6BB" stroke="#2B2B2B" stroke-width="2.6" stroke-linejoin="round"/></svg></span>
 
   <!-- 入口组件：CV 简历 -->
-  <button class="card card-cv" type="button" aria-label="Resume - about me">
+  <button class="card card-cv" type="button" data-card="cv" aria-label="Resume - about me">
     <span class="t">Resume</span>
     <span class="art" aria-hidden="true">
       <svg viewBox="0 0 130 120">
@@ -331,7 +444,7 @@
   </button>
 
   <!-- 入口组件：梦想 / 目标 -->
-  <button class="card card-dream" type="button" aria-label="Dreams and goals">
+  <button class="card card-dream" type="button" data-card="dream" aria-label="Dreams and goals">
     <span class="t">Dreams / Goals</span>
     <span class="art" aria-hidden="true">
       <svg viewBox="0 0 150 110">
@@ -369,7 +482,10 @@
 
   <!-- 右侧手写欢迎语 -->
   <div class="welcome">
-    <h1>Welcome to<br>Joy's Planet</h1>
+    <h1 aria-label="Welcome to Joy's Planet">
+      <span class="wrow"><span class="lt">W</span><span class="lt">e</span><span class="lt">l</span><span class="lt">c</span><span class="lt">o</span><span class="lt">m</span><span class="lt">e</span><span class="lt sp"></span><span class="lt">t</span><span class="lt">o</span></span>
+      <span class="wrow"><span class="lt">J</span><span class="lt">o</span><span class="lt">y</span><span class="lt">'</span><span class="lt">s</span><span class="lt sp"></span><span class="lt">P</span><span class="lt">l</span><span class="lt">a</span><span class="lt">n</span><span class="lt">e</span><span class="lt">t</span></span>
+    </h1>
     <svg class="squiggle" viewBox="0 0 200 18" aria-hidden="true">
       <path d="M4 11 Q26 2 52 12 T104 11 T156 12 T196 9" fill="none" stroke="#2B2B2B" stroke-width="3" stroke-linecap="round"/>
     </svg>
@@ -390,7 +506,6 @@
     <span class="page-mark">02 / INTERNSHIPS</span>
     <div class="intern-head">
       <h2>Internships</h2>
-      <p class="sub">Two chapters, one after another. Tap the pages to flip between them ✳</p>
     </div>
 
     <div class="intern-grid">
@@ -566,7 +681,81 @@
     </div>
   </div>
 </section>
+
+<!-- 第四页：Dreams / Goals -->
+<section class="dreams" id="dreams" aria-label="Dreams and goals">
+  <div class="dreams-wrap">
+    <div class="dreams-head">
+      <span class="page-mark">04 / DREAMS</span>
+      <h2 class="collage-title" aria-label="Dream Future">
+        <span class="cl">D</span><span class="cl">r</span><span class="cl">e</span><span class="cl">a</span><span class="cl">m</span><span class="cl sp"></span>
+        <span class="cl">F</span><span class="cl">u</span><span class="cl">t</span><span class="cl">u</span><span class="cl">r</span><span class="cl">e</span>
+      </h2>
+      <span class="collage-mark" aria-hidden="true">✳ ☆</span>
+    </div>
+
+    <div class="dreams-stage">
+      <!-- 涂鸦装饰：星星 / 爱心 / 月亮 -->
+      <span class="dream-doodle dst1" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 3 Q22 16 37 20 Q22 24 20 37 Q18 24 3 20 Q18 16 20 3Z" fill="#F6D77A" stroke="#2B2B2B" stroke-width="2.6" stroke-linejoin="round"/></svg></span>
+      <span class="dream-doodle dst2" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 5 Q22 17 35 20 Q22 23 20 35 Q19 23 5 20 Q19 17 20 5Z" fill="#FFFEFC" stroke="#2B2B2B" stroke-width="2.6" stroke-linejoin="round"/></svg></span>
+      <span class="dream-doodle dst3" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 3 Q22 16 37 20 Q22 24 20 37 Q18 24 3 20 Q18 16 20 3Z" fill="#B7A2D6" stroke="#2B2B2B" stroke-width="2.6" stroke-linejoin="round"/></svg></span>
+      <span class="dream-doodle dht1" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M20 34 C6 25 5 15 11 11 C16 8 20 12 20 15 C20 12 24 8 29 11 C35 15 34 25 20 34Z" fill="#F7C9D9" stroke="#2B2B2B" stroke-width="2.6" stroke-linejoin="round"/></svg></span>
+      <span class="dream-doodle dmo1" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M25 4 A16 16 0 1 0 36 27 A13 13 0 1 1 25 4Z" fill="#F6D77A" stroke="#2B2B2B" stroke-width="2.6" stroke-linejoin="round"/></svg></span>
+      <span class="dream-doodle dmo2" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M25 4 A16 16 0 1 0 36 27 A13 13 0 1 1 25 4Z" fill="#FFF" stroke="#2B2B2B" stroke-width="2.6" stroke-linejoin="round"/></svg></span>
+
+      <div class="dream-avatar">
+        <img src="./ip-avatar-cutout.png" alt="Joy 的 QQ 人形象" />
+      </div>
+
+      <!-- 上：粉色蜡笔涂抹椭圆 -->
+      <button class="goal-card gc1" type="button" data-goal="1" data-reveal="1">
+        <svg class="blob" viewBox="0 0 330 160" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M46 22 Q120 -2 214 12 Q306 24 322 70 Q334 112 275 140 Q196 168 108 148 Q18 130 8 84 Q2 46 46 22Z" fill="#F7C9D9" opacity=".82"/>
+          <path d="M44 20 Q118 -4 212 12 Q304 22 320 70" fill="none" stroke="#E58FB0" stroke-width="5" stroke-linecap="round" opacity=".7"/>
+          <path d="M14 92 Q22 132 106 146" fill="none" stroke="#E58FB0" stroke-width="4" stroke-linecap="round" opacity=".55"/>
+          <path d="M250 138 q18 8 34 -6" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+        </svg>
+        <h3>To global</h3>
+        <p>Go forward, go abroad</p>
+      </button>
+
+      <!-- 左：紫色不规则手绘圈 -->
+      <button class="goal-card gc2" type="button" data-goal="2" data-reveal="2">
+        <svg class="blob" viewBox="0 0 300 176" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M38 30 Q86 -6 176 8 Q262 14 292 58 Q308 96 268 140 Q204 178 112 160 Q26 150 10 104 Q0 62 38 30Z" fill="#E7DCF2" opacity=".9"/>
+          <path d="M36 34 Q90 -2 174 10 Q258 16 288 58" fill="none" stroke="#B7A2D6" stroke-width="5" stroke-linecap="round"/>
+          <path d="M14 112 Q30 158 116 164" fill="none" stroke="#B7A2D6" stroke-width="4.5" stroke-linecap="round" opacity=".85"/>
+          <path d="M272 124 q10 12 -4 22" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".85"/>
+        </svg>
+        <h3>For content</h3>
+        <p>Be colorful, be creative</p>
+      </button>
+
+      <!-- 右：黄色撕纸便利贴 -->
+      <button class="goal-card gc3" type="button" data-goal="3" data-reveal="3">
+        <svg class="blob" viewBox="0 0 310 168" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M12 16 L54 10 L96 16 L142 8 L188 15 L232 9 L298 14 L304 52 L298 92 L305 132 L296 158 L250 152 L204 160 L156 152 L108 159 L60 151 L14 157 L8 118 L14 76 L7 40Z" fill="#FBE9A8" opacity=".92"/>
+          <path d="M14 18 L52 12 L14 40 L8 78" fill="none" stroke="#EBCB6A" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+          <path d="M298 14 L304 52 L298 92 L305 132" fill="none" stroke="#EBCB6A" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+          <path d="M120 156 q40 6 78 -2" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".8"/>
+        </svg>
+        <h3>With AI</h3>
+        <p>Stay hungry, stay foolish</p>
+      </button>
+    </div>
+  </div>
+</section>
 </div><!-- /.page-flow -->
+
+<canvas id="fxCanvas" aria-hidden="true"></canvas>
+
+<!-- 简历弹窗：占据屏幕的卡片，点空白关闭 -->
+<div class="cv-modal" id="cvModal" role="dialog" aria-modal="true" aria-label="Resume">
+  <div class="cv-sheet" role="document">
+    <button class="cv-close" type="button" aria-label="Close">×</button>
+    <img class="cv-frame" src="./resume-preview.png" alt="陈之玉 产品经理 简历" />
+  </div>
+</div>
 
 <!-- 跟随鼠标动效运行时 + 初始化（资源来自 ip-motion-web 文件夹） -->
 <script src="./ip-motion-web/frame-scrub.js"></script>
@@ -685,6 +874,26 @@
     });
   });
 
+  // 第一页：Resume 卡片 → 弹出简历 PDF 卡片；Dreams 卡片 → 对应页面
+  var cvCard = document.querySelector('[data-card="cv"]');
+  var cvModal = document.getElementById('cvModal');
+  function openCv(){ if(cvModal){ cvModal.classList.add('open'); document.body.classList.add('modal-open'); } }
+  function closeCv(){ if(cvModal){ cvModal.classList.remove('open'); document.body.classList.remove('modal-open'); } }
+  if(cvCard) cvCard.addEventListener('click', openCv);
+  if(cvModal){
+    // 点遮罩空白处关闭；点卡片本身不关闭
+    cvModal.addEventListener('click', function(e){ if(e.target === cvModal) closeCv(); });
+    var cvClose = cvModal.querySelector('.cv-close');
+    if(cvClose) cvClose.addEventListener('click', closeCv);
+  }
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeCv(); });
+  var dreamCard = document.querySelector('[data-card="dream"]');
+  if(dreamCard) dreamCard.addEventListener('click', function(e){
+    if(e) e.preventDefault();
+    var t = document.getElementById('dreams');
+    if(t) t.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'});
+  });
+
   // 第三页：项目卡片 → 对应详情页
   var PROJ_URL = {
     language:'./project-source-language-demo.html',
@@ -724,6 +933,123 @@
   if(hint){
     hint.addEventListener('click', toSection);
     hint.addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' '){ toSection(e); } });
+  }
+
+  // ===== 第四页 Dreams：滚动错峰渐入 / 点击礼花 / 鼠标小心心 =====
+  var dreamEls = Array.prototype.slice.call(document.querySelectorAll('.dream-avatar,.goal-card'));
+  var dreamsSec = document.getElementById('dreams');
+  if(dreamEls.length){
+    function revealDream(el){
+      if(el.classList.contains('in')) return;
+      var d = parseInt(el.getAttribute('data-reveal') || '0', 10);
+      setTimeout(function(){ el.classList.add('in'); }, reduce ? 0 : d * 130);
+    }
+    // 兜底：按视口位置判断，保证任何环境（含无 IO / headless）都能触发
+    function revealByViewport(){
+      dreamEls.forEach(function(el){
+        if(el.classList.contains('in')) return;
+        var r = el.getBoundingClientRect();
+        if(r.top < window.innerHeight * .9 && r.bottom > 0) revealDream(el);
+      });
+    }
+    if('IntersectionObserver' in window){
+      var dro = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if(en.isIntersecting){ revealDream(en.target); dro.unobserve(en.target); }
+        });
+      }, {threshold:.2});
+      dreamEls.forEach(function(el){ dro.observe(el); });
+      window.addEventListener('scroll', revealByViewport, {passive:true});
+      revealByViewport();
+    } else {
+      window.addEventListener('scroll', revealByViewport, {passive:true});
+      revealByViewport();
+    }
+  }
+  // 点击目标卡 → 手绘风小礼花（Canvas 粒子）
+  var fx = document.getElementById('fxCanvas');
+  var ctx = fx ? fx.getContext('2d') : null;
+  var confetti = [], confettiRAF = null;
+  function sizeFx(){ if(fx){ fx.width = window.innerWidth; fx.height = window.innerHeight; } }
+  if(fx){ sizeFx(); window.addEventListener('resize', sizeFx); }
+  var CONFETTI_COLORS = ['#F7C9D9','#F6D77A','#B7A2D6','#9FC7E2','#A9D6BB','#EA9FBB'];
+  function burst(x, y){
+    if(!ctx) return;
+    for(var i=0;i<40;i++){
+      confetti.push({
+        x:x, y:y,
+        vx:(Math.random()-.5)*10, vy:-Math.random()*9-3,
+        g:.18+Math.random()*.14,
+        size:5+Math.random()*7,
+        color:CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+        rot:Math.random()*6.28, vr:(Math.random()-.5)*.3,
+        life:1, shape:i%3
+      });
+    }
+    if(!confettiRAF) confettiRAF = requestAnimationFrame(drawConfetti);
+  }
+  function drawConfetti(){
+    ctx.clearRect(0,0,fx.width,fx.height);
+    confetti = confetti.filter(function(p){
+      p.x += p.vx; p.y += p.vy; p.vy += p.g; p.rot += p.vr; p.life -= .011;
+      if(p.life<=0 || p.y>fx.height+40) return false;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0,p.life);
+      ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.fillStyle = p.color;
+      if(p.shape===0){
+        ctx.beginPath(); ctx.arc(0,0,p.size/2,0,Math.PI*2); ctx.fill();
+      } else if(p.shape===1){
+        ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*.65);
+      } else {
+        ctx.beginPath();
+        for(var k=0;k<5;k++){
+          var a = k*1.2566 - 1.57, b = a + .628;
+          ctx.lineTo(Math.cos(a)*p.size, Math.sin(a)*p.size);
+          ctx.lineTo(Math.cos(b)*p.size*.45, Math.sin(b)*p.size*.45);
+        }
+        ctx.fill();
+      }
+      ctx.restore();
+      return true;
+    });
+    if(confetti.length) confettiRAF = requestAnimationFrame(drawConfetti);
+    else { confettiRAF = null; ctx.clearRect(0,0,fx.width,fx.height); }
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.goal-card'), function(card){
+    card.addEventListener('click', function(){
+      var r = card.getBoundingClientRect();
+      burst(r.left + r.width/2, r.top + r.height/2);
+    });
+  });
+  // 鼠标轨迹：Dreams 页小心心，其他区域黄色小星星（仅精确指针设备）
+  if(!matchMedia('(pointer:coarse)').matches){
+    function spawnTrail(cls, text, x, y, ttl){
+      var el = document.createElement('span');
+      el.className = cls; el.textContent = text;
+      el.style.left = x + 'px'; el.style.top = y + 'px';
+      document.body.appendChild(el);
+      setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, ttl);
+    }
+    var lastStar = 0;
+    document.addEventListener('mousemove', function(e){
+      if(reduce) return;
+      // 在 Dreams 区域内交给下方的心心处理
+      if(dreamsSec && dreamsSec.contains(e.target)) return;
+      var now = Date.now();
+      if(now - lastStar < 110) return;
+      lastStar = now;
+      spawnTrail('trail-star', '✦', e.clientX, e.clientY, 1050);
+    }, {passive:true});
+    var lastHeart = 0;
+    if(dreamsSec){
+      dreamsSec.addEventListener('mousemove', function(e){
+        if(reduce) return;
+        var now = Date.now();
+        if(now - lastHeart < 95) return;
+        lastHeart = now;
+        spawnTrail('trail-heart', '♥', e.clientX, e.clientY, 1000);
+      });
+    }
   }
 
   applyStatic();
