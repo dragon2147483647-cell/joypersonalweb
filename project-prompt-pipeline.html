@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI写作助手 · 腾讯 AI 写作</title>
+<style>
+  :root{
+    --paper:#FFF7F2; --pink:#F7C9D9; --pink-soft:#FCE3EC; --pink-deep:#EA9FBB;
+    --ink:#2B2B2B; --butter:#F6D77A;
+    --hand-cn:"Xingkai SC","STXingkai","Kaiti SC","STKaiti","KaiTi",cursive;
+    --hand-en:"Comic Sans MS","Chalkboard SE","Marker Felt","Segoe Print",cursive;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;color:var(--ink);font-family:var(--hand-cn);background:var(--paper);overflow-x:hidden;
+    background-image:
+      radial-gradient(ellipse 55% 20% at 2% 1%,rgba(247,201,217,.5),transparent 70%),
+      radial-gradient(ellipse 40% 14% at 99% 3%,rgba(247,201,217,.36),transparent 72%),
+      radial-gradient(ellipse 60% 12% at 50% 99%,rgba(247,201,217,.4),transparent 72%)}
+  .grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.18;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}
+  .wrap{width:min(1320px,calc(100% - 40px));margin:auto;position:relative;z-index:2}
+  .back-btn{position:fixed;left:22px;top:20px;z-index:80;font:700 15px var(--hand-cn);color:var(--ink);
+    background:#FFFEFC;border:3px solid var(--ink);border-radius:255px 14px 225px 16px/16px 225px 14px 255px;
+    padding:8px 16px;cursor:pointer;box-shadow:5px 6px 0 rgba(43,43,43,.16);text-decoration:none;transition:.16s}
+  .back-btn:hover{transform:translate(-2px,-2px);box-shadow:8px 9px 0 rgba(43,43,43,.2);background:var(--pink-soft)}
+  .back-btn:active{transform:translate(2px,2px);box-shadow:2px 3px 0 rgba(43,43,43,.18)}
+  h1,h2{font-family:var(--hand-en)}
+
+  .hero{padding:62px 0 24px;text-align:center}
+  .eyebrow{display:inline-block;font:700 12px var(--hand-en);letter-spacing:.16em;border:2px solid var(--ink);
+    border-radius:14px 9px 16px 10px;padding:4px 12px;background:rgba(255,255,255,.8);transform:rotate(-2deg)}
+  .hero h1{font-size:clamp(36px,5.2vw,62px);line-height:1.05;margin:16px 0 10px;letter-spacing:-.02em}
+  .hero .lead{max-width:840px;margin:12px auto 0;font-size:16px;line-height:1.8;color:#7a5866}
+  .hero .hint{display:inline-block;margin-top:16px;font:13px var(--hand-en);background:var(--butter);
+    border:2px solid var(--ink);border-radius:20px;padding:6px 14px;transform:rotate(1deg)}
+
+  .toolbar{display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:0 0 12px;flex-wrap:wrap}
+  .zoom-btn{font:700 13px var(--hand-en);border:2.5px solid var(--ink);border-radius:14px 9px 15px 10px;
+    background:#FFFEFC;padding:6px 12px;cursor:pointer;box-shadow:3px 4px 0 rgba(43,43,43,.14)}
+  .zoom-btn:hover{background:var(--pink-soft)}
+  .zoom-lbl{font:13px var(--hand-en);color:#9a7a86}
+
+  .chart-shell{background:#FFFEFC;border:3px solid var(--ink);border-radius:245px 18px 255px 16px/18px 245px 16px 255px;
+    box-shadow:9px 11px 0 rgba(43,43,43,.12);padding:22px 24px 26px;overflow:hidden}
+  .chart-scroll{overflow:auto;height:70vh;min-height:420px;border:2px dashed rgba(43,43,43,.22);border-radius:12px;
+    background:#FFFCFA;padding:16px}
+  #zoomLayer{transform-origin:top left}
+  .mermaid{font-family:var(--hand-cn)}
+  .mermaid svg{max-width:none!important}
+  .status{font:14px var(--hand-cn);color:#9a7a86;text-align:center;padding:40px 10px}
+  .status.err{color:#c0396b}
+
+  /* 流程说明 */
+  .compare{margin-top:54px}
+  .compare-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:8px}
+  .compare-head h2{font-size:clamp(26px,4vw,40px);margin:0}
+  .compare-head .hint{font:14px var(--hand-cn);color:#9a7a86}
+  .sync-btn{font:700 13px var(--hand-en);border:2.5px solid var(--ink);border-radius:255px 14px 225px 16px/16px 225px 14px 255px;
+    background:var(--butter);padding:7px 15px;cursor:pointer;box-shadow:4px 5px 0 rgba(43,43,43,.16);margin-left:auto}
+  .sync-btn:hover{background:var(--pink-soft)}
+  .video-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .video-box{background:#FFFEFC;border:3px solid var(--ink);border-radius:230px 16px 240px 18px/18px 240px 16px 230px;
+    box-shadow:8px 9px 0 rgba(43,43,43,.13);padding:16px 16px 18px}
+  .video-box.after{border-color:#C0396B;box-shadow:8px 9px 0 rgba(192,57,107,.16)}
+  .video-label{font:700 17px var(--hand-cn);display:flex;align-items:center;gap:8px;margin:2px 0 12px}
+  .video-label .pill{font:700 11px var(--hand-en);border:2px solid var(--ink);border-radius:999px;padding:2px 9px;background:var(--pink-soft)}
+  .video-box.after .video-label .pill{background:#F7C9D9}
+  .video-box video{display:block;max-height:340px;max-width:100%;width:auto;height:auto;margin:0 auto;
+    border-radius:10px;border:2px solid var(--ink);background:#000}
+  .video-note{font:13px var(--hand-cn);color:#8a6a76;margin-top:10px;line-height:1.7}
+
+  .footnote{text-align:center;font:13px var(--hand-en);color:#9a7a86;padding:22px 0 40px}
+
+  @media(max-width:900px){
+    .video-grid{grid-template-columns:1fr}
+    .sync-btn{margin-left:0}
+    .wrap{width:calc(100% - 32px)}
+    .hero h1{font-size:32px;word-break:break-word}
+    .hero .lead{font-size:14px}
+    .chart-shell{padding:16px 14px 18px}
+    .chart-scroll{max-height:70vh;padding:10px}
+  }
+
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+  .sec-head .sec-num{font:900 38px var(--hand-en);color:var(--pink-deep);line-height:.7}
+  .sec-head h2{font-size:clamp(25px,3.6vw,36px);margin:0}
+  .stage-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:26px}
+  .stage{background:#FFFEFC;border:3px solid var(--ink);border-radius:230px 16px 225px 18px/18px 225px 16px 230px;
+    box-shadow:7px 8px 0 rgba(43,43,43,.13);padding:16px 18px 18px}
+  .stage:nth-child(3n+1){background:#EAF3E4;transform:rotate(-1deg)}
+  .stage:nth-child(3n+2){background:#DCEAF5;transform:rotate(1deg)}
+  .stage:nth-child(3n+3){background:#F6D77A;transform:rotate(-1deg)}
+  .stage .sn{font:700 11px var(--hand-en);letter-spacing:.14em;color:#9a7a86}
+  .stage h3{font-family:var(--hand-cn);font-size:20px;margin:6px 0 8px}
+  .stage p{font:13px/1.75 var(--hand-cn);color:#5a4650;margin:0}
+  .stage .skills{display:inline-block;margin-top:8px;font:11px var(--hand-en);border:2px solid var(--ink);
+    border-radius:999px;padding:2px 9px;background:#fff}
+
+  /* 原图查看 */
+  .orig-wrap{background:#FFFEFC;border:3px solid var(--ink);border-radius:245px 18px 255px 16px/18px 245px 16px 255px;
+    box-shadow:8px 10px 0 rgba(43,43,43,.12);padding:18px 20px 20px;margin:20px 0 6px}
+  .orig-scroll{overflow:auto;max-height:72vh;border:2px dashed rgba(43,43,43,.25);border-radius:10px;background:#fff;padding:10px;text-align:center}
+  .orig-scroll img{display:inline-block;width:auto;max-width:none;height:auto}
+  .orig-bar{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+  .orig-bar button{font:700 12px var(--hand-en);border:2.5px solid var(--ink);border-radius:14px 9px 15px 10px;
+    background:#fff;padding:5px 12px;cursor:pointer;box-shadow:3px 4px 0 rgba(43,43,43,.14)}
+
+  .stage-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:26px}
+  .stage{background:#FFFEFC;border:3px solid var(--ink);border-radius:230px 16px 225px 18px/18px 225px 16px 230px;
+    box-shadow:7px 8px 0 rgba(43,43,43,.13);padding:16px 18px 18px}
+  .stage:nth-child(3n+1){background:#EAF3E4;transform:rotate(-1deg)}
+  .stage:nth-child(3n+2){background:#DCEAF5;transform:rotate(1deg)}
+  .stage:nth-child(3n+3){background:#F6D77A;transform:rotate(-1deg)}
+  .stage .sn{font:700 11px var(--hand-en);letter-spacing:.14em;color:#9a7a86}
+  .stage h3{font-family:var(--hand-cn);font-size:20px;margin:6px 0 8px}
+  .stage p{font:13px/1.75 var(--hand-cn);color:#5a4650;margin:0}
+  .stage .skills{display:inline-block;margin-top:8px;font:11px var(--hand-en);border:2px solid var(--ink);
+    border-radius:999px;padding:2px 9px;background:#fff}
+
+</style></head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<a class="back-btn" href="./index.html#tencent">← 返回项目列表</a>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow">TENCENT · AI WRITING</span>
+    <h1>AI写作助手</h1>
+  </header>
+
+  <div class="toolbar">
+    <span class="zoom-lbl">缩放</span>
+    <button class="zoom-btn" id="zoomOut" type="button">−</button>
+    <span class="zoom-lbl" id="zoomVal">100%</span>
+    <button class="zoom-btn" id="zoomIn" type="button">＋</button>
+    <button class="zoom-btn" id="zoomReset" type="button">重置</button>
+  </div>
+
+  <div class="chart-shell">
+    <div class="chart-scroll" id="chartScroll">
+      <div id="zoomLayer">
+        <div class="status" id="status">正在绘制流程图…</div>
+        <div id="diagram"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage-list">
+    <div class="stage"><span class="sn">STEP 01</span><h3>输入分流</h3><p>判断纯文本指令 / 附带参考文档 / 附带模板，走不同解析支路。</p></div>
+    <div class="stage"><span class="sn">⭐ SKILL</span><h3>上传文档 Skills 增强</h3><p>内容结构理解、富文本格式解析、意图联合理解、格式模板提取。</p><span class="skills">Skills 增强</span></div>
+    <div class="stage"><span class="sn">STEP 02</span><h3>需求结构化</h3><p>汇总为 Requirement Schema，完整性校验，信息不足则追问澄清。</p></div>
+    <div class="stage"><span class="sn">⭐ CORE</span><h3>提示词拼接引擎</h3><p>行文风格 / 叙事逻辑 / 行业知识 / 受众适配 / 质量约束五类组件匹配后组装。</p><span class="skills">核心引擎</span></div>
+    <div class="stage"><span class="sn">STEP 03</span><h3>文档规划</h3><p>确定类型风格、生成大纲与字数分配，用户确认后再进入生成。</p></div>
+    <div class="stage"><span class="sn">STEP 04</span><h3>内容生成</h3><p>逐章节生成，前序摘要作上下文；特殊元素（表格/图表/引用）分别处理。</p></div>
+    <div class="stage"><span class="sn">STEP 05</span><h3>质量审查</h3><p>逻辑、事实、风格、字数、重复检测；不合格标记问题点并回退修正。</p></div>
+    <div class="stage"><span class="sn">⭐ SKILL</span><h3>输出格式规范 Skills</h3><p>按公文/合同/作文/论文/通用匹配格式规范，校验后自动修正。</p><span class="skills">Skills 增强</span></div>
+    <div class="stage"><span class="sn">STEP 06</span><h3>格式排版与输出</h3><p>基础样式、标题层级、封面目录、页眉页码等，最终由 python-docx 渲染。</p></div>
+  </div>
+
+  <div class="footnote">✦ AI写作助手 · 腾讯 AI 写作项目沉淀 ✦</div>
+</div>
+
+<script src="./vendor/mermaid.min.js"></script>
+<script>
+(function(){
+  var GRAPH = String.raw`flowchart TD
+    Start([🟢 用户输入]) --> A{输入类型判断}
+
+    %% ========== 输入分流 ==========
+    A -->|纯文本指令| B1[意图解析<br/>写/改/续/翻译/摘要]
+    A -->|附带参考文档| B2[文档解析<br/>docx/pdf/md/txt]
+    A -->|附带模板| B3[模板解析<br/>槽位/样式/结构约束]
+
+    %% ========== ⭐ 上传文档 Skills 增强 ==========
+    B2 --> SKILL_DOC[/⭐ 上传文档 Skills 增强/]
+    B3 --> SKILL_DOC
+
+    SKILL_DOC --> SKILL_DOC_1[内容结构理解<br/>标题层级·段落逻辑·表格数据]
+    SKILL_DOC --> SKILL_DOC_2[富文本格式解析<br/>高亮·删除线·色彩标记·加粗]
+    SKILL_DOC --> SKILL_DOC_3[用户意图联合理解<br/>指令 × 文档内容 联合语义分析]
+    SKILL_DOC --> SKILL_DOC_4[格式模板提取<br/>自动提取上传文档排版风格作为参考]
+
+    SKILL_DOC_1 --> C
+    SKILL_DOC_2 --> C
+    SKILL_DOC_3 --> C
+    SKILL_DOC_4 --> C
+    B1 --> C[写作需求结构化<br/>→ Requirement Schema]
+
+    %% ========== 需求校验 ==========
+    C --> D{需求完整性校验}
+    D -->|信息不足| D1[追问澄清<br/>Clarification]
+    D1 --> C
+    D -->|需求明确| PROMPT_ENGINE
+
+    %% ========== ⭐ 提示词拼接引擎 ==========
+    PROMPT_ENGINE[/⭐ 提示词拼接引擎/] --> PE1[匹配行文风格组件<br/>正式公文体·商务报告体·口语化]
+    PROMPT_ENGINE --> PE2[匹配叙事逻辑组件<br/>总—分—总·时间线·问题—方案·因果]
+    PROMPT_ENGINE --> PE3[匹配行业知识组件<br/>法律·金融·医疗·教育·科技]
+    PROMPT_ENGINE --> PE4[匹配受众适配组件<br/>领导汇报·技术团队·外部客户]
+    PROMPT_ENGINE --> PE5[匹配质量约束组件<br/>字数·必含要素·禁用表达·引用规范]
+
+    PE1 --> ASSEMBLE[组装完整 Prompt<br/>System Prompt + User Prompt]
+    PE2 --> ASSEMBLE
+    PE3 --> ASSEMBLE
+    PE4 --> ASSEMBLE
+    PE5 --> ASSEMBLE
+
+    %% ========== 文档规划 ==========
+    ASSEMBLE --> E[文档规划<br/>Doc Planner]
+    E --> E1[确定文档类型与风格]
+    E1 --> E2[生成大纲 Outline<br/>一级标题+摘要 → 二级标题+要点 → 字数分配]
+    E2 --> E3{用户确认大纲?}
+    E3 -->|需要调整| E2
+    E3 -->|确认| F[内容生成<br/>Content Generator]
+
+    %% ========== 内容生成 ==========
+    F --> F1[逐章节生成正文<br/>前序章节摘要作为上下文]
+    F1 --> F2{含特殊元素?}
+    F2 -->|表格| F2a[结构化表格生成]
+    F2 -->|图表| F2b[图表占位+数据描述]
+    F2 -->|引用/脚注| F2c[引用标记处理]
+    F2 -->|无| F3
+    F2a --> F3[章节内容合并]
+    F2b --> F3
+    F2c --> F3
+
+    %% ========== 质量审查 ==========
+    F3 --> G[质量审查<br/>Quality Review]
+    G --> G1[逻辑连贯性检查]
+    G1 --> G2[事实一致性检查]
+    G2 --> G3[用语风格一致性<br/>是否符合提示词指定风格]
+    G3 --> G4[字数/篇幅合规性]
+    G4 --> G5[重复内容检测]
+    G5 --> G6{综合评分}
+    G6 -->|不合格| G7[标记问题点 → 回退修正]
+    G7 --> F1
+    G6 -->|合格| SKILL_FMT
+
+    %% ========== ⭐ 输出格式规范 Skills ==========
+    SKILL_FMT[/⭐ 输出格式规范 Skills/] --> FMT_MATCH{匹配文档类型}
+    FMT_MATCH -->|公文| FMT1[红头格式·发文字号<br/>主送抄送·正文层级·落款用印]
+    FMT_MATCH -->|合同| FMT2[合同编号·甲乙方信息<br/>条款编号·签章页·法律术语]
+    FMT_MATCH -->|作文| FMT3[标题居中·段落缩进<br/>字数范围·首尾呼应]
+    FMT_MATCH -->|论文| FMT4[摘要关键词·章节编号<br/>参考文献 GB/T 7714·图表编号]
+    FMT_MATCH -->|通用| FMT5[基础格式规范<br/>标题层级·段落间距·字体统一]
+
+    FMT1 --> FMT_CHECK[格式校验 & 自动修正]
+    FMT2 --> FMT_CHECK
+    FMT3 --> FMT_CHECK
+    FMT4 --> FMT_CHECK
+    FMT5 --> FMT_CHECK
+
+    %% ========== 格式排版 ==========
+    FMT_CHECK --> H[格式排版<br/>Formatter]
+    H --> H1[应用文档基础样式<br/>字体/字号/行距/页边距]
+    H1 --> H2[标题层级样式映射<br/>Heading 1~6]
+    H2 --> H3[封面页生成]
+    H3 --> H4[自动目录插入]
+    H4 --> H5[页眉页脚 + 页码]
+    H5 --> H6[表格/图片排版]
+    H6 --> H7[格式一致性终检]
+
+    %% ========== 渲染输出 ==========
+    H7 --> I[Docx 渲染引擎<br/>python-docx 生成文件]
+    I --> J{用户审阅}
+
+    %% ========== 迭代修改 ==========
+    J -->|需要修改| K[定位修改范围]
+    K --> K1{修改粒度}
+    K1 -->|某段措辞| F1
+    K1 -->|整章逻辑| E2
+    K1 -->|整体结构| E1
+    K1 -->|仅格式问题| H1
+    J -->|满意| End([🟢 输出最终 .docx])
+
+    %% ========== 样式 ==========
+    style Start fill:#10B981,color:#fff,stroke:none
+    style End fill:#10B981,color:#fff,stroke:none
+
+    style SKILL_DOC fill:#F59E0B,color:#fff,stroke:#F59E0B,stroke-width:2px
+    style PROMPT_ENGINE fill:#F59E0B,color:#fff,stroke:#F59E0B,stroke-width:2px
+    style SKILL_FMT fill:#F59E0B,color:#fff,stroke:#F59E0B,stroke-width:2px
+
+    style SKILL_DOC_1 fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+    style SKILL_DOC_2 fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+    style SKILL_DOC_3 fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+    style SKILL_DOC_4 fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+
+    style PE1 fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+    style PE2 fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+    style PE3 fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+    style PE4 fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+    style PE5 fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+    style ASSEMBLE fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+
+    style FMT1 fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+    style FMT2 fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+    style FMT3 fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+    style FMT4 fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+    style FMT5 fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+    style FMT_CHECK fill:#FEF3C7,color:#92400E,stroke:#F59E0B
+
+    style A fill:#3B82F6,color:#fff,stroke:none
+    style D fill:#3B82F6,color:#fff,stroke:none
+    style E3 fill:#3B82F6,color:#fff,stroke:none
+    style F2 fill:#3B82F6,color:#fff,stroke:none
+    style G6 fill:#3B82F6,color:#fff,stroke:none
+    style FMT_MATCH fill:#3B82F6,color:#fff,stroke:none
+    style J fill:#3B82F6,color:#fff,stroke:none
+    style K1 fill:#3B82F6,color:#fff,stroke:none
+
+    style D1 fill:#EF4444,color:#fff,stroke:none
+    style G7 fill:#EF4444,color:#fff,stroke:none
+
+    style I fill:#8B5CF6,color:#fff,stroke:none`;
+  var diagram = document.getElementById('diagram');
+  var status = document.getElementById('status');
+  var scroll = document.getElementById('chartScroll');
+  var layer = document.getElementById('zoomLayer');
+  var val = document.getElementById('zoomVal');
+  var scale = 1;
+  function applyZoom(){
+    layer.style.zoom = scale;
+    val.textContent = Math.round(scale*100) + '%';
+  }
+  document.getElementById('zoomIn').addEventListener('click',function(){ scale=Math.min(2.5,scale+0.1); applyZoom(); });
+  document.getElementById('zoomOut').addEventListener('click',function(){ scale=Math.max(0.4,scale-0.1); applyZoom(); });
+  document.getElementById('zoomReset').addEventListener('click',function(){ scale=1; applyZoom(); scroll.scrollTo(0,0); });
+  if(!window.mermaid){ status.textContent='流程图组件未能加载'; status.className='status err'; return; }
+  mermaid.initialize({
+    startOnLoad:false,
+    theme:'base',
+    securityLevel:'loose',
+    fontFamily:'"Xingkai SC","STXingkai","Kaiti SC",sans-serif',
+    themeVariables:{fontSize:'13px', primaryTextColor:'#2B2B2B', lineColor:'#888'},
+    flowchart:{useMaxWidth:false, htmlLabels:true, nodeSpacing:38, rankSpacing:48}
+  });
+  mermaid.render('pipeFlow', GRAPH).then(function(res){
+    diagram.innerHTML = res.svg;
+    status.style.display='none';
+    applyZoom();
+  }).catch(function(err){
+    status.textContent='流程图渲染失败：' + (err && err.message ? err.message : 'unknown');
+    status.className='status err';
+  });
+})();
+</script>
+
+</body>
+</html>
